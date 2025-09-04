@@ -1,0 +1,443 @@
+{{ 'video-section.css' | asset_url | stylesheet_tag }}
+{{ 'component-deferred-media.css' | asset_url | stylesheet_tag }}
+{{ 'Video_Slider_Reveal.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+    }
+
+    @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+    .video-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    display: block; /* default state */
+    opacity: 1;
+    transition: opacity 0.6s ease;
+  }
+
+
+    .video-section__media {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    .video-section__media video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .desktop-video {
+      display: block;
+    }
+
+    .mobile-video {
+      display: none;
+    }
+
+    @media screen and (max-width: 749px) {
+      .desktop-video {
+        display: none;
+      }
+      .mobile-video {
+        display: block;
+      }
+    }
+
+    .curve-svg {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+      pointer-events: none;
+      height: 0;
+      transition: height 0.4s ease;
+    }
+
+    .curve-svg svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+   .reveal-behind {
+    opacity: 0;
+    transform: translateY(100px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 1;
+    position: relative;
+    padding-top: 2px;
+  }
+{%- endstyle -%}
+
+<div class="color-{{ section.settings.color_scheme }} gradient">
+  <div class="video-section isolate{% unless section.settings.full_width %} page-width{% endunless %} section-{{ section.id }}-padding">
+    <div
+      {% if section.settings.full_width %}
+        class="page-width"
+      {% endif %}
+    >
+      {%- unless section.settings.heading == blank -%}
+        <div class="title-wrapper title-wrapper--no-top-margin">
+          <h2 class="title inline-richtext {{ section.settings.heading_size }}">{{ section.settings.heading }}</h2>
+        </div>
+      {%- endunless -%}
+    </div>
+
+    {% if section.settings.video %}
+      <div class="video-section__media desktop-video">
+        {{
+          section.settings.video
+          | video_tag:
+            autoplay: true,
+            loop: section.settings.enable_video_looping,
+            muted: true,
+            playsinline: true,
+            controls: true,
+            image_size: '1100x'
+          | replace: '<video', '<video fetchpriority="high"'
+        }}
+      </div>
+    {% endif %}
+
+    {% if section.settings.video_mobile %}
+      <div class="video-section__media mobile-video">
+        {{
+          section.settings.video_mobile
+          | video_tag:
+            autoplay: true,
+            loop: section.settings.enable_video_looping,
+            muted: true,
+            playsinline: true,
+            controls: true,
+            image_size: '750x'
+          | replace: '<video', '<video fetchpriority="high"'
+        }}
+      </div>
+    {% endif %}
+
+    <div class="curve-svg">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path fill="#FFFFFF" d="M0,0 Q720,320 1440,0 L1440,320 L0,320 Z"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- Reveal Content -->
+<div class="reveal-behind section-{{ section.id }}-padding page-width">
+  <div class="slideshow">
+    {% for block in section.blocks %}
+      <div class="slide">
+        {% if block.settings.image or block.settings.mobile_image %}
+          <picture>
+            {% if block.settings.mobile_image %}
+              <source
+                media="(max-width: 749px)"
+                srcset="{{ block.settings.mobile_image | image_url: width: 400 }}"
+              >
+            {% endif %}
+            {% if block.settings.image %}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                alt="{{ block.settings.title | escape }}"
+                loading="lazy"
+              >
+            {% endif %}
+          </picture>
+        {% endif %}
+
+        <div class="slide-content">
+          {% if block.settings.title != blank %}
+            <h2>{{ block.settings.title }}</h2>
+          {% endif %}
+          {% if block.settings.text != blank %}
+            <span>{{ block.settings.text }}</span>
+          {% endif %}
+        </div>
+
+        {% if block.settings.product != blank %}
+          {% assign product = all_products[block.settings.product] %}
+          {% if product %}
+            <div class="slider__product">
+              <div class="slider__product_tags">
+                <div>{{ block.settings.product_for }}</div>
+                <div>{{ block.settings.product_concern }}</div>
+              </div>
+              <div class="slider-banner__product">
+                <div class="slider-content_product">
+                  <div>
+                    <p class="b2 semibold">{{ block.settings.product_title }}</p>
+                    <p class="b3">{{ block.settings.product_offer_text }}</p>
+                  </div>
+                  <div>
+                    <a href="{{ product.url }}" class="slider_btn" aria-label="{{ product.title }}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                        <circle cx="16" cy="16" r="16" fill="white"/>
+                        <path d="M10 10H22V22" stroke="black" stroke-width="2"/>
+                        <path d="M22 10L10 22" stroke="black" stroke-width="2"/>
+                      </svg>
+                    </a>
+                  </div>
+                </div>
+                <img src="{{ product.featured_image | img_url: '300x' }}" alt="{{ product.title }}">
+              </div>
+            </div>
+          {% else %}
+            <p style="color:red;">⚠ Product not found via all_products.</p>
+          {% endif %}
+        {% else %}
+          <p style="color:red;">⚠ No product selected in Theme Editor.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+  <div class="slideshow-dots"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const slideshow = document.querySelector('.slideshow');
+    const slides = document.querySelectorAll('.slide');
+    const dotsContainer = document.querySelector('.slideshow-dots');
+    const videoSection = document.querySelector('.video-section');
+    const revealSection = document.querySelector('.reveal-behind');
+    const overlay = document.querySelector('.curve-svg');
+
+    document.querySelectorAll('video[data-fetchpriority]').forEach((video) => {
+      video.setAttribute('fetchpriority', video.dataset.fetchpriority);
+    });
+
+    // Create dots
+    if (slides.length > 0 && dotsContainer) {
+      slides.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.classList.add('dot');
+        if (index === 0) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          slideshow.scrollTo({
+            left: slideshow.offsetWidth * index,
+            behavior: 'smooth',
+          });
+        });
+        dotsContainer.appendChild(dot);
+      });
+
+      slideshow.addEventListener('scroll', () => {
+        const scrollLeft = slideshow.scrollLeft;
+        const width = slideshow.offsetWidth;
+        const activeIndex = Math.round(scrollLeft / width);
+
+        dotsContainer.querySelectorAll('.dot').forEach((dot, i) => {
+          dot.classList.toggle('active', i === activeIndex);
+        });
+      });
+    }
+
+    // Ensure video section visible on load
+    if (videoSection) {
+      videoSection.style.display = 'block';
+      videoSection.style.opacity = 1;
+    }
+
+    // Animate reveal section
+    if (revealSection) {
+      gsap.fromTo(
+        revealSection,
+        { opacity: 0, y: 100 },
+        {
+          scrollTrigger: {
+            trigger: revealSection,
+            start: 'top 90%',
+            once: true,
+          },
+          opacity: 1,
+          y: 0,
+          duration: 1.2,
+          ease: 'power4.out',
+        }
+      );
+    }
+
+    // Scroll-based curve + collapse video section smoothly
+    if (videoSection && overlay) {
+      ScrollTrigger.create({
+        trigger: videoSection,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+        onUpdate: (self) => {
+          const progress = self.progress;
+          const maxHeight = 800;
+          overlay.style.height = `${progress * maxHeight}px`;
+
+          if (progress >= 0.99 && !videoSection.classList.contains('faded-out')) {
+            const videoMedia = videoSection.querySelector('.video-section__media');
+            videoSection.classList.add('faded-out');
+
+            gsap.to(videoMedia, {
+              opacity: 0,
+              duration: 0.6,
+              ease: 'power2.out',
+            });
+
+            gsap.to(videoSection, {
+              height: 0,
+              paddingTop: 0,
+              paddingBottom: 0,
+              minHeight: 0,
+              duration: 0.8,
+              ease: 'power2.inOut',
+              onComplete: () => {
+                videoSection.style.overflow = 'hidden';
+                ScrollTrigger.refresh(); // fix layout shift
+              },
+            });
+          }
+        },
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Autoplay Video + Reveal",
+  "tag": "section",
+  "class": "section",
+  "disabled_on": { "groups": ["header", "footer"] },
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "default": "Autoplay Video Section",
+      "label": "Heading"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Shopify Video (Desktop)"
+    },
+    {
+      "type": "video",
+      "id": "video_mobile",
+      "label": "Shopify Video (Mobile)"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_video_looping",
+      "label": "Loop Video",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width",
+      "default": false
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top Padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom Padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Slide Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Slide Image (Mobile)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Slide Title",
+          "default": "Your Slide Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Slide Text",
+          "default": "Your slide description goes here."
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Featured Product"
+        },
+        {
+          "type": "text",
+          "id": "product_for",
+          "label": "Product For",
+          "default": "Skin"
+        },
+        {
+          "type": "text",
+          "id": "product_concern",
+          "label": "Product Concern",
+          "default": "Face Care"
+        },
+        {
+          "type": "text",
+          "id": "product_title",
+          "label": "Product Title",
+          "default": "Product Title"
+        },
+        {
+          "type": "text",
+          "id": "product_offer_text",
+          "label": "Product Offer Text",
+          "default": "Extra 10% Off on first purchase"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Autoplay Video + Reveal"
+    }
+  ]
+}
+{% endschema %}

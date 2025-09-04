@@ -1,0 +1,156 @@
+{{ 'store-locator.css' | asset_url | stylesheet_tag }}
+
+<div class="store-locator">
+  <div class="store-locator__container">
+    <div class="store-locator__sidebar">
+      <h2 class="store-locator__title center">{{ section.settings.heading }}</h2>
+      <p class="center">{{ section.settings.sub-text }}</p>
+
+      <div class="country-selector">
+        <select id="country-select">
+          <option value="all">All Countries</option>
+          {% assign country_list = '' %}
+          {% for block in section.blocks %}
+            {% assign country = block.settings.country %}
+            {% unless country_list contains country %}
+              <option value="{{ country }}">{{ country }}</option>
+              {% assign country_list = country_list | append: country | append: ',' %}
+            {% endunless %}
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="center"><p>{{ section.settings.text }}</p></div>
+
+      <div id="store-list">
+        {% for block in section.blocks %}
+          <div class="store" data-country="{{ block.settings.country }}" data-id="{{ forloop.index0 }}">
+            <h3>{{ block.settings.store_name }}</h3>
+            <p>{{ block.settings.store_address }}</p>
+            <p><strong>📞</strong> {{ block.settings.phone }}</p>
+            <p><strong>🕒</strong> {{ block.settings.hours }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="store-locator__map">
+      <div id="store-map"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let map;
+  const markers = {};
+  const locations = [
+    {% for block in section.blocks %}
+      {
+        id: {{ forloop.index0 }},
+        lat: {{ block.settings.latitude }},
+        lng: {{ block.settings.longitude }},
+        title: "{{ block.settings.store_name | escape }}",
+        address: "{{ block.settings.store_address | escape }}"
+      },
+    {% endfor %}
+  ];
+
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("store-map"), {
+      center: { lat: {{ section.settings.map_center_lat }}, lng: {{ section.settings.map_center_lng }} },
+      zoom: {{ section.settings.map_zoom }}
+    });
+
+    locations.forEach(loc => {
+      const marker = new google.maps.Marker({
+        position: { lat: loc.lat, lng: loc.lng },
+        map,
+        title: loc.title
+      });
+
+      const infowindow = new google.maps.InfoWindow({
+        content: `<strong>${loc.title}</strong><br>${loc.address}`
+      });
+
+      marker.addListener('click', () => {
+        infowindow.open(map, marker);
+      });
+
+      markers[loc.id] = { marker, infowindow };
+    });
+  }
+
+  window.addEventListener('DOMContentLoaded', function () {
+    const selector = document.getElementById('country-select');
+    const stores = document.querySelectorAll('.store');
+
+    function filterStores(country) {
+      stores.forEach(store => {
+        store.style.display = (country === 'all' || store.dataset.country === country) ? 'block' : 'none';
+      });
+    }
+
+    // Set default to 'India' if exists
+    const indiaOption = Array.from(selector.options).find(opt => opt.value === 'India');
+    if (indiaOption) {
+      selector.value = 'India';
+    } else {
+      selector.value = selector.options[0].value;
+    }
+
+    filterStores(selector.value);
+
+    selector.addEventListener('change', () => {
+      filterStores(selector.value);
+    });
+
+    document.querySelectorAll('.store').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.dataset.id;
+        const loc = locations.find(l => l.id == id);
+        if (loc && markers[id]) {
+          const { marker, infowindow } = markers[id];
+          map.setCenter(marker.getPosition());
+          map.setZoom(14);
+          infowindow.open(map, marker);
+        }
+      });
+    });
+  });
+</script>
+
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key={{ section.settings.google_maps_api_key }}&callback=initMap">
+</script>
+
+
+{% schema %}
+{
+  "name": "Store Locator",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "FCL STORES" },
+    { "type": "text", "id": "sub-text", "label": "Sub Text", "default": "Find your nearest store and enjoy La Prairie exclusive services." },
+    { "type": "text", "id": "text", "label": "Note Text", "default": "We have shown you the three nearest stores. Please try with a different location." },
+    { "type": "text", "id": "google_maps_api_key", "label": "Google Maps API Key", "default": "YOUR_API_KEY_HERE" },
+    { "type": "range", "id": "map_zoom", "min": 1, "max": 20, "step": 1, "label": "Map Zoom", "default": 5 },
+    { "type": "number", "id": "map_center_lat", "label": "Map Center Latitude", "default": 28 },
+    { "type": "number", "id": "map_center_lng", "label": "Map Center Longitude", "default": 77 }
+  ],
+  "blocks": [
+    {
+      "type": "store",
+      "name": "Store Location",
+      "settings": [
+        { "type": "text", "id": "store_name", "label": "Store Name", "default": "New Delhi Store" },
+        { "type": "textarea", "id": "store_address", "label": "Store Address", "default": "Connaught Place, New Delhi, India" },
+        { "type": "text", "id": "phone", "label": "Phone", "default": "+91 98765 43210" },
+        { "type": "text", "id": "hours", "label": "Opening Hours", "default": "Open now until 22:00" },
+        { "type": "number", "id": "latitude", "label": "Latitude", "default": 28 },
+        { "type": "number", "id": "longitude", "label": "Longitude", "default": 77 },
+        { "type": "text", "id": "country", "label": "Country", "default": "India" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Map Store Locator" }]
+}
+{% endschema %}

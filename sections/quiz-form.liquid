@@ -1,0 +1,1030 @@
+<!-- Suggested Tags (with prefix) to use in Shopify
+      Use tags on products like:
+      quiz_skin_oily, quiz_skin_dry, quiz_skin_combination
+      quiz_concern_acne, quiz_concern_wrinkles, etc.
+      quiz_age_19-25
+      quiz_gender_female, quiz_gender_other
+      quiz_sunscreen_daily, etc. -->
+
+      
+<section class="quiz-wrapper">
+  <!-- Intro Slide -->
+  <div id="quiz-intro" class="quiz-intro-slide" 
+       style="background-image: url({{ section.settings.bg_image | image_url: width: 1600 }});"
+       data-mobile-bg="{{ section.settings.bg_image_mobile | image_url: width: 800 }}">
+    <div class="page-width intro-image">
+      <div class="overlay"></div>
+      <div class="intro-content">
+        <h2>Find Your Perfect<br>Skincare Routine</h2>
+        <p>Take a quick 2-minute quiz, and our experts will create a personalized skincare routine for you.</p>
+        <button id="start-quiz-btn" class="button button--primary">Take the Quiz</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Quiz Container -->
+  <div id="quiz-container" class="quiz-container hidden" style="background-image: url({{ section.settings.ques_bg_image | image_url: width: 1600 }});">
+    <form id="quiz-form">
+      <div class="quiz-head">
+        <div class="quiz-head-text">
+          <p class="b2 text-left">Find Your Perfect Skincare Routine</p>
+        </div>
+        <div class="quiz-buttons">
+          <button type="button" id="prev-btn">←</button>
+          
+        </div>
+      </div>
+        
+      <!-- All questions -->
+      <!-- Question 1 -->
+      <div class="quiz-question" data-key="name">
+        <h3>Hey there! Let’s start with your name</h3>
+        <input id="Qinput" type="text" name="name" placeholder="Enter your name" required />
+      </div>
+
+      <!-- Question 2 -->
+      <div class="quiz-question" data-key="email">
+        <h3>Enter your email to receive your routine</h3>
+        <input id="Qinput" type="email" name="email" placeholder="Enter your email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" />
+        <span id="email-error" style="color: red; font-size: 14px; display: none;">Please enter a valid email address</span>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="quiz-question" data-key="age">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+            <h3>Which age group best describes you?</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <p>Select only one</p>
+          <label class="bullet-option"><input type="radio" name="age" value="<18" required><span class="custom-bullet"></span> &lt;18</label>
+          <label class="bullet-option"><input type="radio" name="age" value="18-24"><span class="custom-bullet"></span> 18–24</label>
+          <label class="bullet-option"><input type="radio" name="age" value="25-34"><span class="custom-bullet"></span> 25–34</label>
+          <label class="bullet-option"><input type="radio" name="age" value="35-44"><span class="custom-bullet"></span> 35–44</label>
+          <label class="bullet-option"><input type="radio" name="age" value="45+"><span class="custom-bullet"></span> 45+</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="quiz-question" data-key="gender">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>We’d love to know how you identify</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <p>Select only one</p>
+          <label class="bullet-option"><input type="radio" name="gender" value="Male" required><span class="custom-bullet"></span> Male</label>
+          <label class="bullet-option"><input type="radio" name="gender" value="Female"><span class="custom-bullet"></span> Female</label>
+          <label class="bullet-option"><input type="radio" name="gender" value="Non-binary"><span class="custom-bullet"></span> Non-binary</label>
+          <label class="bullet-option"><input type="radio" name="gender" value="Prefer not to say"><span class="custom-bullet"></span> Prefer not to say</label>
+          <label class="bullet-option"><input type="radio" name="gender" value="Other"><span class="custom-bullet"></span> Other</label>
+          <div id="other-gender-input" style="display:none; margin-top:10px;">
+            <input type="text" name="other_gender" placeholder="Please specify..." />
+          </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- Remaining questions -->
+    <div class="quiz-question" data-key="skin_type">
+      <div class="quiz-question-container">
+        <div class="quiz-question-container-left">
+        <h3>Every skin is different - what’s yours like?</h3>
+        </div>
+        <div class="quiz-question-container-right">
+        <div class="type-container">
+          <div>
+            <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/dcb0285691f05d3a92783b16c571b265b0cdc91f.png?v=1755680344" id="img-type">
+            <label class="bullet-option"><input type="radio" name="skin_type" value="Oily" required><span class="custom-bullet"></span> Oily</label>
+          </div>
+          <div>
+            <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/b3ea3b8d2d48cfe95576eb7084c17aefd8a28b49.png?v=1755680344" id="img-type"/>
+            <label class="bullet-option"><input type="radio" name="skin_type" value="Dry"><span class="custom-bullet"></span> Dry</label>
+          </div>
+          <div>
+            <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/bf2e7b88480e77bff6251d39fcc1f1a944e819a0.png?v=1755680344" id="img-type">
+            <label class="bullet-option"><input type="radio" name="skin_type" value="Combination"><span class="custom-bullet"></span> Combination</label>
+          </div>
+          <div>
+            <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/046eadcf36b4c6d6ec15dbab0ef84e4accd65680.png?v=1755680345" id="img-type">
+            <label class="bullet-option"><input type="radio" name="skin_type" value="Normal"><span class="custom-bullet"></span> Normal</label>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="quiz-question" data-key="primary_concern">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+            <h3>Choose the concern you’d like to address</h3>
+          </div>
+          <div class="quiz-question-container-right">
+            <div class="grid-container">
+              <div>
+                <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/9cdc7c6c9e87a38ecff9ea012ee24a6c3f6f990d.png?v=1755680840" id="img-type-width">
+                <label class="bullet-option"><input type="radio" name="primary_concern" value="Acne" required><span class="custom-bullet"></span>Acne</label>
+              </div>
+              <div>
+                <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/24a6fd6a749d6d26022324c540751d7dedfa2603.png?v=1755680840" id="img-type-width">
+                <label class="bullet-option"><input type="radio" name="primary_concern" value="Early signs of ageing"><span class="custom-bullet"></span>Early signs of ageing</label>
+              </div>
+              <div>
+                <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/4e2d3d3a86b0109eea6d7fd15a7c33441bf1d87b.png?v=1755680840" id="img-type-width">
+                <label class="bullet-option"><input type="radio" name="primary_concern" value="Open Pores"><span class="custom-bullet"></span>Open Pores</label>
+              </div>
+              <div>
+                <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/d507bbb18cefb2968ac0b8f9111dd89a3b4cb708.png?v=1755680840" id="img-type-width">
+                <label class="bullet-option"><input type="radio" name="primary_concern" value="Pigmentation"><span class="custom-bullet"></span>Pigmentation</label>
+              </div>
+              <div>
+                <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/ea556cd4832adaf14e1e00347b53f2595cfd7aab.png?v=1755680840" id="img-type-width">
+                <label class="bullet-option"><input type="radio" name="primary_concern" value="Sensitive Skin"><span class="custom-bullet"></span>Sensitive Skin</label>
+              </div>
+          </div>
+          </div>
+          </div>
+      </div>
+      <div class="quiz-question" data-key="secondary_concern">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>Let us know any other areas you'd like to improve</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <div class="checkbox-group">
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Breakouts">
+              <span class="custom-checkbox"></span> Breakouts
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Dryness">
+              <span class="custom-checkbox"></span> Dryness
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Dullness">
+              <span class="custom-checkbox"></span> Dullness
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Dehydration">
+              <span class="custom-checkbox"></span> Dehydration
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Black heads">
+              <span class="custom-checkbox"></span> Black heads
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Sun Damage">
+              <span class="custom-checkbox"></span> Sun Damage
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Uneven skin tone">
+              <span class="custom-checkbox"></span> Uneven skin tone
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Inflammation">
+              <span class="custom-checkbox"></span> Inflammation
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Fine Lines & Wrinkles">
+              <span class="custom-checkbox"></span> Fine Lines & Wrinkles
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Hyperpigmentation">
+              <span class="custom-checkbox"></span> Hyperpigmentation
+            </label>
+            <label class="checkbox-option">
+              <input type="checkbox" name="secondary_concern" value="Acne Scars">
+              <span class="custom-checkbox"></span> Acne Scars
+            </label>
+          </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-key="sunscreen_use">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>How consistent are you with sunscreen application?</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <label class="bullet-option"><input type="radio" name="sunscreen_use" value="Always" required><span class="custom-bullet"></span> Always</label>
+          <label class="bullet-option"><input type="radio" name="sunscreen_use" value="Sometimes"><span class="custom-bullet"></span> Sometimes</label>
+          <label class="bullet-option"><input type="radio" name="sunscreen_use" value="Rarely"><span class="custom-bullet"></span> Rarely</label>
+          <label class="bullet-option"><input type="radio" name="sunscreen_use" value="Never"><span class="custom-bullet"></span> Never</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="quiz-question" data-key="medical_treatment">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>Are you currently undergoing any medical treatment?</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <label class="bullet-option"><input type="radio" name="medical_treatment" value="Yes" required><span class="custom-bullet"></span> Yes</label>
+          <label class="bullet-option"><input type="radio" name="medical_treatment" value="No"><span class="custom-bullet"></span> No</label>
+          </div>
+          </div>
+      </div>
+      
+      <div class="quiz-question" data-key="skincare_therapy">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>Are you currently on any skincare therapy?</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <label class="bullet-option"><input type="radio" name="skincare_therapy" value="Yes" required><span class="custom-bullet"></span> Yes</label>
+          <label class="bullet-option"><input type="radio" name="skincare_therapy" value="No"><span class="custom-bullet"></span> No</label>
+          </div>
+          </div>
+      </div>
+      
+      <div class="quiz-question" data-key="active_acne">
+        <div class="quiz-question-container">
+          <div class="quiz-question-container-left">
+          <h3>Are you struggling with active acne currently?</h3>
+          </div>
+          <div class="quiz-question-container-right">
+          <label class="bullet-option"><input type="radio" name="active_acne" value="Yes" required><span class="custom-bullet"></span> Yes</label>
+          <label class="bullet-option"><input type="radio" name="active_acne" value="No"><span class="custom-bullet"></span> No</label>
+          </div>
+          </div>
+      </div>
+      
+        <div class="quiz-buttons">
+          <button type="button" id="next-btn">next→</button>
+        </div>
+    </form>
+  </div>
+  
+  <!-- Result Section -->
+  <div id="quiz-result" class="quiz-result hidden" style="background-image: url({{ section.settings.ques_bg_image | image_url: width: 1600 }});"></div>
+</section>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const startBtn = document.getElementById('start-quiz-btn');
+  const quizContainer = document.getElementById('quiz-container');
+  const intro = document.getElementById('quiz-intro');
+  const form = document.getElementById('quiz-form');
+  const resultEl = document.getElementById('quiz-result');
+  const questions = Array.from(form.querySelectorAll('.quiz-question'));
+  const nextBtn = document.getElementById('next-btn');
+  const prevBtn = document.getElementById('prev-btn');
+  const emailError = document.getElementById('email-error');
+
+  let currentIndex = 0;
+
+  function showSlide(index) {
+    questions.forEach((q, i) => q.style.display = i === index ? 'block' : 'none');
+    prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+    nextBtn.textContent = index === questions.length - 1 ? 'Submit' : 'Next';
+  }
+
+  startBtn.addEventListener('click', () => {
+    intro.classList.add('hidden');
+    quizContainer.classList.remove('hidden');
+    showSlide(currentIndex);
+  });
+
+  nextBtn.addEventListener('click', async () => {
+    const currentQuestion = questions[currentIndex];
+    const inputs = currentQuestion.querySelectorAll("input, select, textarea");
+
+    let valid = [...inputs].some(i =>
+      (i.type === "radio" || i.type === "checkbox") ? i.checked : i.value.trim()
+    );
+
+    if (currentQuestion.dataset.key === 'email') {
+      const emailInput = currentQuestion.querySelector('input[type="email"]');
+      const pattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+      if (!pattern.test(emailInput.value.trim())) {
+        emailError.style.display = 'block';
+        return;
+      } else {
+        emailError.style.display = 'none';
+      }
+    }
+
+    if (!valid) {
+      alert("Please complete this question before continuing.");
+      return;
+    }
+
+    if (currentQuestion.dataset.key === 'gender') {
+      const selected = form.querySelector('input[name="gender"]:checked');
+      const other = form.querySelector('input[name="other_gender"]');
+      if (selected?.value === 'Other' && (!other || !other.value.trim())) {
+        alert("Please specify your gender.");
+        return;
+      }
+    }
+
+    if (currentIndex === questions.length - 1) {
+      handleSubmit();
+    } else {
+      currentIndex++;
+      showSlide(currentIndex);
+    }
+  });
+
+  prevBtn.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showSlide(currentIndex);
+    }
+  });
+
+  document.querySelectorAll('input[name="gender"]').forEach(el => {
+    el.addEventListener('change', e => {
+      document.getElementById('other-gender-input').style.display = e.target.value === 'Other' ? 'block' : 'none';
+    });
+  });
+
+  async function handleSubmit() {
+    const formData = new FormData(form);
+    const data = {};
+    formData.forEach((val, key) => {
+      if (key === 'other_gender') return;
+      if (key === 'name') return;
+      if (key === 'gender' && val === 'Other') {
+        data[key] = formData.get('other_gender');
+      } else {
+        data[key] = key + '_' + val;
+      }
+    });
+
+    const { email, ...answers } = data;
+    const customerId = window.ShopifyAnalytics?.meta?.page?.customerId || null;
+
+    if (!email && !customerId) {
+      alert("Please enter email or be logged in.");
+      return;
+    }
+
+    quizContainer.classList.add('hidden');
+    resultEl.classList.remove('hidden');
+    resultEl.innerHTML = `<p class="quiz-submit">Submitting your quiz...</p>`;
+
+    try {
+      await fetch("https://shopify-quiz-app.onrender.com/api/save-quiz-data", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, customerId, answers })
+      });
+
+      fetchRecommendations(answers);
+    } catch {
+      resultEl.innerHTML = `<p>Error saving quiz. Please try again.</p>`;
+    }
+  }
+
+  async function fetchRecommendations(answers) {
+    const tagPrefix = '{{ section.settings.tag_prefix }}';
+    const maxProducts = {{ section.settings.max_products }};
+    const tags = Object.entries(answers)
+      .filter(([_, val]) => !!val)
+      .map(([key, val]) => `${tagPrefix}${val.toString().toLowerCase().replace(/\s+/g, '-')}`);
+
+    const query = tags.map(tag => `tag:${tag}`).join(' OR ');
+    const encodedQuery = encodeURIComponent(query);
+
+    try {
+      const response = await fetch(`/search/suggest.json?q=${encodedQuery}&resources[type]=product`);
+      const data = await response.json();
+      const products = data.resources?.results?.products?.slice(0, maxProducts) || [];
+
+      resultEl.innerHTML = `<h2>Recommended Products</h2><div class="quiz-product-container"></div>`;
+      const container = resultEl.querySelector('.quiz-product-container');
+
+      if (products.length > 0) {
+        // Fetch full product details for each product
+        const productDetailsPromises = products.map(async product => {
+          // Extract handle from product.url
+          let handle = null;
+          try {
+            const urlParts = product.url.split('/');
+            // Find the handle after '/products/'
+            const idx = urlParts.findIndex(p => p === 'products');
+            if (idx !== -1 && urlParts.length > idx + 1) {
+              handle = urlParts[idx + 1].split('?')[0];
+            }
+          } catch {}
+
+          let variantId = null;
+          let productData = null;
+          if (handle) {
+            try {
+              const prodResp = await fetch(`/products/${handle}.js`);
+              productData = await prodResp.json();
+              if (productData.variants && productData.variants.length > 0) {
+                variantId = productData.variants[0].id;
+              }
+            } catch {}
+          }
+
+          // Render product card
+              return `
+                <div class="quiz-product">
+                  <a href="${product.url}">
+                    <img src="${product.image}" alt="${product.title}" />
+                    <p>${product.title}</p>
+                    {% comment %} <p>₹${(product.price / 100).toFixed(2)}</p> {% endcomment %}
+                  </a>
+                  {% comment %} ${variantId ? `<button class=\"add-to-cart-btn\" data-variant=\"${variantId}\">Add to Cart</button>` : '<span style=\"color:#888;font-size:14px;\">Not available for cart</span>'} {% endcomment %}
+                </div>
+              `;
+        });
+
+        // Wait for all product cards to be built
+        const productCards = await Promise.all(productDetailsPromises);
+        container.innerHTML = productCards.join('');
+
+        // Attach event listeners to Add to Cart buttons
+        const addToCartBtns = container.querySelectorAll('.add-to-cart-btn');
+        console.log('Add to Cart buttons found:', addToCartBtns.length);
+        addToCartBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            console.log('Button clicked, variant:', this.dataset.variant);
+            window.addToCart(this.dataset.variant);
+          });
+        });
+      } else {
+        container.innerHTML = `<p>No matching products found.</p>`;
+      }
+
+      resultEl.innerHTML += `<button id="retake-quiz-btn" class="retake-btn">Retake Quiz</button>`;
+
+      // Retake button event
+      document.getElementById('retake-quiz-btn').addEventListener('click', () => {
+        location.reload();
+      });
+    } catch (error) {
+      resultEl.innerHTML = `<p>Error loading recommendations. Please try again.</p>`;
+      console.error("Recommendation fetch failed:", error);
+    }
+  }
+
+  // ✅ Add to Cart function
+  window.addToCart = async function (variantId) {
+    try {
+      console.log('addToCart called with:', variantId);
+      // Ensure variantId is a number
+      const variantInt = parseInt(variantId, 10);
+      if (isNaN(variantInt)) {
+        alert('Invalid product variant.');
+        return;
+      }
+      console.log('Adding to cart variantId:', variantInt);
+      const formData = new URLSearchParams();
+      formData.append('id', variantInt);
+      formData.append('quantity', 1);
+      const response = await fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: formData.toString()
+      });
+      const result = await response.json();
+      console.log('Add to cart response:', result);
+      if (response.ok && !result.status) {
+        alert('Product added to cart!');
+      } else {
+        alert(result.message || 'Something went wrong. Please try again.');
+      }
+    } catch (error) {
+      console.error('Add to cart error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+  };
+
+});
+</script>
+
+
+
+<style>
+.text-left {
+text-align: left;
+}
+
+@media (max-width: 767px) {
+  .quiz-intro-slide {
+    background-image: url('{{ section.settings.bg_image_mobile | image_url: width: 800 }}') !important;
+    min-height: 90rem!important;
+  }
+}
+
+h2 {
+  color: #00609D;
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%; /* 38.4px */
+}
+.quiz-result {
+  min-height: 60rem;
+}
+.quiz-wrapper .quiz-intro-slide {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 60rem;
+  padding-inline: 0;
+}
+#Qinput {
+    color: #00609D;
+    text-align: center;
+    min-width: 500px;
+    height: 50px;
+    border: 0;
+    border-radius: 5px;
+    margin-bottom: 20px;
+} 
+@media screen and (max-width: 768px){
+  #Qinput{
+    min-width: unset;
+  }
+}
+.checkbox-option input{
+  min-width: unset;
+}
+*:focus-visible {
+    outline: none !important;
+    outline-offset: none !important;
+    box-shadow: none !important;
+}
+.quiz-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.quiz-intro-slide,
+.quiz-container,
+.quiz-result {
+  position: relative;
+  z-index: 1;
+}
+
+.quiz-intro-slide .intro-image .quiz-result {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  padding: 0 40px;
+}
+  /* Quiz Slide Layout */
+.quiz-question-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+  padding-bottom: 40px;
+  
+}
+
+/* Left Column (Question Text) */
+.quiz-question-container-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+}
+
+.quiz-question-container-left h3 {
+  font-weight: 600;
+  color: #00609D;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* Right Column (Options) */
+.quiz-question-container-right {
+  flex: 1;
+  background: #f5fbff;
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: flex-start;
+  min-height: 450px;
+}
+
+.quiz-question-container-right p {
+  margin: 0;
+  margin-bottom: 20px;
+  color: #747474;
+}
+
+.quiz-question-container-right .type-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+  
+.quiz-intro-slide .overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+.intro-content {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  text-align: left;
+  padding: 40px 0;
+  max-width: 500px;
+}
+.quiz-submit{
+  color: #00609D;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 120%;
+}
+.intro-content h2 {
+  color: #00609D;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: left;
+}
+.intro-content p {
+  color: #00609D;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  margin-bottom: 20px;
+  text-align: left;
+}
+.intro-content button {
+  background: #00609d;
+  border-radius: var(--buttons-radius-outset);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  min-width: -webkit-fill-available;
+  height: 48px;
+  padding: 16px;
+  justify-content: center;
+  align-items: center;
+}
+.quiz-container, .quiz-result {
+  max-width: 1440px;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.quiz-container{
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+  min-height: 60rem;
+}
+.quiz-result{
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: 50px;
+}
+#quiz-form {
+  width: 80%;
+  padding: 40px;
+}
+.quiz-head {
+ // display: flex;
+ // justify-content: space-between;
+  position: relative;
+}
+.quiz-head .quiz-buttons{
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.quiz-head-text p {
+  color: #00609D;
+  font-size: 20px;
+}
+#prev-btn {
+  display: inline-block;
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  border: none;
+  background: #fff;
+  cursor: pointer;
+}
+#next-btn {
+    background: #00609d;
+    border-radius: var(--buttons-radius-outset);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    min-width: 290px;
+    height: 48px;
+    padding: 16px;
+    justify-content: center;
+    align-items: center;
+}
+.quiz-question {
+  padding-top: 20px;
+}
+.quiz-slide input,
+.quiz-slide select {
+  width: 80%;
+  padding: 10px;
+  margin: 20px 0;
+}
+.quiz-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.quiz-product-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  flex-wrap: wrap;
+  gap: 32px;
+}
+.quiz-product-container > p {
+  color: #00609D;
+  font-weight: 600;
+}
+.quiz-product .title {
+  max-width: 90%;
+  margin-inline: auto;
+  margin-block: 0;
+  text-decoration: none;
+  color: black;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.quiz-product img {
+  width: 150px;
+}
+.quiz-product {
+  margin: 0;
+  flex: 0 1 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.retake-btn {
+  margin-top: 10px;
+  background-color: #00609d;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+}
+.hidden {
+  display: none;
+}
+
+.bullet-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px 0;
+  cursor: pointer;
+  font-size: 1rem;
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.bullet-option input[type="radio"] {
+  display: none;
+}
+
+.custom-bullet {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #004080;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.bullet-option input[type="radio"]:checked + .custom-bullet::after {
+  position: absolute;
+  content: "";
+  width: 8px;
+  height: 8px;
+  background: #004080;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#img-type {
+  border-radius: 5px;
+}
+
+#img-type-width {
+  width: 100px;
+  border-radius: 5px;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  //margin-top: 20px;
+  align-items: flex-start;
+}
+
+.checkbox-option {
+  position: relative;
+  padding-left: 34px;
+  font-size: 16px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.6;
+}
+
+.checkbox-option input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.custom-checkbox {
+  position: absolute;
+  left: 0;
+  top: 3px;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #aaa;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-option input[type="checkbox"]:checked ~ .custom-checkbox {
+  background-color: #00609D;
+  border-color: #00609D;
+}
+
+.custom-checkbox::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-option input[type="checkbox"]:checked ~ .custom-checkbox::after {
+  display: block;
+}
+
+.checkbox-option .custom-checkbox::after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.quiz-head-text b2{
+  font-size: 20px;
+}
+
+.quiz-question-container-right .grid-container{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  width: 100%;
+}
+
+.quiz-question-container-right .grid-container #img-type-width{
+  width: 100%;
+}
+
+.quiz-question-container-right .grid-container .bullet-option{
+  align-items: flex-start;
+}
+
+.quiz-question-container-right .grid-container .bullet-option .custom-bullet{
+  top: 5.5px;
+}
+
+@media screen and (max-width: 769px){
+  .quiz-question-container-right .grid-container, 
+  .quiz-question-container-right .type-container {
+    grid-template-columns: 1fr;
+  }
+  .quiz-question-container-right .grid-container .bullet-option{
+    margin-top: 8px;
+  }
+  .quiz-question-container-right .grid-container .bullet-option .custom-bullet{
+    top: 1.5px;
+  }
+  #quiz-form{
+    width: 100%;
+    padding: 16px;
+  }
+  #next-btn{
+    width: 100%;
+  }
+  input{
+    min-width: unset;
+    width: 100%;
+  }
+  .quiz-head .quiz-buttons{
+    position: unset;
+    transform: unset;
+    width: fit-content;
+    transform: translateY(5px);
+  }
+  .quiz-head{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+  }
+  .quiz-question-container{
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+  }
+  .type-container{
+    flex-direction: column;
+  }
+  .type-container .bullet-option{
+    margin-top: 8px;
+  }
+  .quiz-buttons{
+    width: 100%;
+  }
+  .quiz-head-text p{
+    margin-bottom: 0;
+  }
+  .intro-content p{
+    line-height: unset;
+  }
+}
+
+</style>
+
+{% schema %}
+{
+  "name": "Quiz Form",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Intro Quiz Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image_mobile",
+      "label": "Intro Background Image (Mobile)"
+    },
+    {
+      "type": "image_picker",
+      "id": "ques_bg_image",
+      "label": "Quiz Question Background Image"
+    },
+    {
+      "type": "text",
+      "id": "tag_prefix",
+      "label": "Tag Prefix",
+      "default": "quiz_"
+    },
+    {
+      "type": "range",
+      "id": "max_products",
+      "label": "Max Products to Show",
+      "default": 5,
+      "min": 1,
+      "max": 20
+    }
+  ]
+}
+{% endschema %}
+

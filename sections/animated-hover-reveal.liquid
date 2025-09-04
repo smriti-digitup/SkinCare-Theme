@@ -1,0 +1,142 @@
+{{ 'hover-reveal.css' | asset_url | stylesheet_tag }}
+
+<div
+  id="hover-reveal-{{ section.id }}"
+  class="hover-reveal-section color-{{ section.settings.color_scheme }} isolate{% unless section.settings.full_width %} page-width{% endunless %}"
+>
+  {%- if section.settings.left_bg_image != blank -%}
+    <div
+      class="bg-image left-bg"
+      style="background-image: url('{{ section.settings.left_bg_image | image_url: width: 1000 }}');"
+    ></div>
+  {%- endif -%}
+  {%- if section.settings.right_bg_image != blank -%}
+    <div
+      class="bg-image right-bg"
+      style="background-image: url('{{ section.settings.right_bg_image | image_url: width: 1000 }}');"
+    ></div>
+  {%- endif -%}
+
+  <div class="isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+    <div class="hover-reveal-wrapper isolate{% unless section.settings.full_width %} page-width{% endunless %}">
+      <div class="hover-reveal-content">
+        <h2 class="hover-reveal-heading regular">
+          {{ section.settings.heading }}
+        </h2>
+        {% if section.settings.paragraph != blank %}
+          <div class="hover-reveal-paragraph b1 regular">
+            {{ section.settings.paragraph }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const section = document.getElementById('hover-reveal-{{ section.id }}');
+  if (!section || !window.gsap) return;
+
+  const heading   = section.querySelector('.hover-reveal-heading');
+  const paragraph = section.querySelector('.hover-reveal-paragraph');
+  const elems = [heading, paragraph].filter(Boolean);
+
+  // Initial hidden state
+  gsap.set(elems, { opacity: 0, y: 10, willChange: 'transform, opacity' });
+
+  let isVisible = false;
+  let rafId = null;
+
+  // Show content while the section's CENTER is between 10% and 90% of the viewport
+  const TOP_PCT = 0.10;  // 10%
+  const BOT_PCT = 0.90;  // 90%
+
+  function evaluate() {
+    rafId = null;
+
+    const rect = section.getBoundingClientRect();
+    const vh = window.innerHeight || document.documentElement.clientHeight;
+
+    // Position of the section's center relative to the viewport [0..1]
+    const centerY = rect.top + rect.height / 2;
+    const ratio = centerY / vh;
+
+    const within = ratio >= TOP_PCT && ratio <= BOT_PCT;
+
+    if (within && !isVisible) {
+      isVisible = true;
+      gsap.killTweensOf(elems);
+      gsap.to(elems, {
+        opacity: 1,
+        y: 0,
+        duration: 0.6,
+        ease: 'power2.out',
+        stagger: 0.12
+      });
+    } else if (!within && isVisible) {
+      isVisible = false;
+      gsap.killTweensOf(elems);
+      gsap.to(elems, {
+        opacity: 0,
+        y: 10,
+        duration: 0.45,
+        ease: 'power2.in',
+        stagger: 0.05
+      });
+    }
+  }
+
+  function onScrollOrResize() {
+    if (rafId) return;
+    rafId = requestAnimationFrame(evaluate);
+  }
+
+  window.addEventListener('scroll', onScrollOrResize, { passive: true });
+  window.addEventListener('resize', onScrollOrResize);
+
+  // Initial check
+  onScrollOrResize();
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Hover Reveal Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "left_bg_image",
+      "label": "Left Background Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_bg_image",
+      "label": "Right Background Image"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Hover me"
+    },
+    {
+      "type": "textarea",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "This paragraph is revealed smoothly with background zoom effect."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color Scheme",
+      "default": "background-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hover Reveal Section"
+    }
+  ]
+}
+{% endschema %}

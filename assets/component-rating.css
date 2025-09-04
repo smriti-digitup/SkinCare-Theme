@@ -1,0 +1,85 @@
+.product--no-media .rating-wrapper {
+  text-align: center;
+}
+
+.rating {
+  display: inline-block;
+  margin: 0;
+}
+
+.product .rating-star {
+  --letter-spacing: 0.8;
+  --font-size: 1.7;
+}
+
+.card-wrapper .rating-star {
+  --letter-spacing: 0.7;
+  --font-size: 1.4;
+}
+
+.rating-star {
+  --color-rating-star: #00609d;
+  --percent: calc(
+    (
+        var(--rating) / var(--rating-max) + var(--rating-decimal) *
+          var(--font-size) /
+          (var(--rating-max) * (var(--letter-spacing) + var(--font-size)))
+      ) * 100%
+  );
+  font-size: 1.5rem;
+  line-height: 1;
+  display: inline-block;
+  font-family: Times;
+  margin: 0;
+}
+
+.rating-star::before {
+  content: "★★★★★";
+  background: linear-gradient(
+    90deg,
+    var(--color-rating-star) var(--percent),
+    rgba(var(--color-foreground), 0.15) var(--percent)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rating-text {
+  display: none;
+}
+
+.rating-count {
+  display: inline-block;
+  margin: 0;
+}
+
+@media (forced-colors: active) {
+  .rating {
+    display: none;
+  }
+
+  .rating-text {
+    display: block;
+  }
+}
+
+.rating-pill {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-height: calc(
+    1em * 1.6 * 2.2
+  );
+  line-height: 1.4;
+}
+
+@media screen and (max-width: 1240px){
+  .rating-pill{
+    flex-direction: column;
+    align-items: baseline;
+    min-height: calc(
+    1em * 1.6 * 2.35
+  );
+  line-height: 1.4;
+  }
+}

@@ -1,0 +1,202 @@
+<div class="text-image-scroll page-width">
+  <div class="scroll-wrapper">
+    <div class="image-holder">
+      {% for block in section.blocks %}
+        <img 
+          src="{{ block.settings.image | img_url: '800x' }}" 
+          alt="" 
+          class="scroll-img" 
+          data-index="{{ forloop.index0 }}"
+        />
+      {% endfor %}
+    </div>
+
+    <div class="text-group">
+      {% for block in section.blocks %}
+        <div class="text-block" data-index="{{ forloop.index0 }}">
+          <h2>{{ block.settings.heading }}</h2>
+          <p class="b2">{{ block.settings.text }}</p>
+          <img 
+          src="{{ block.settings.image-small | img_url: '140px' }}" height="140px" width="140px" class="img-small-about">
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<style>
+  .scroll-wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .image-holder {
+    flex: 1;
+    position: sticky;
+    top: 100px;
+  }
+
+  .scroll-img {
+    display: none;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .scroll-img.active {
+    display: block;
+    animation: fadeIn 0.6s ease;
+  }
+
+  .text-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+
+  .text-block {
+    opacity: 0.3;
+    transform: translateY(60px);
+    transition: all 0.4s ease;
+  }
+
+  .text-block.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .img-small-about {
+  height: 140px;
+  width: 140px;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+@media screen and (max-width: 768px) {
+  .scroll-wrapper {
+    display: block;
+  }
+
+  .image-holder {
+    position: sticky;
+    top: 4.5rem;
+    background: #fff;
+    z-index: 1;
+    padding: 20px 0 10px 0;
+    box-shadow: 0px 8px 6px rgb(255 255 255 / 46%);
+    width: 100%;
+  }
+
+  .scroll-img {
+    display: none;
+    width: 100%; /* Ensures image fills the area */
+    height: auto;
+  }
+
+  .scroll-img.active {
+    display: block;
+    border-radius: 5px;
+  }
+
+  .text-group {
+    //margin-top: 20px;
+    //padding: 0 16px;
+    gap: 60px;
+  }
+
+  .text-block {
+    transform: translateY(30px);
+    transition: all 0.4s ease;
+    opacity: 0.3;
+  }
+
+  .text-block.active {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+</style>
+
+
+<script src="https://unpkg.com/gsap@3/dist/gsap.min.js" defer="defer"></script>
+<script src="https://unpkg.com/gsap@3/dist/ScrollTrigger.min.js" defer="defer"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const textBlocks = document.querySelectorAll('.text-block');
+    const images = document.querySelectorAll('.scroll-img');
+
+    const startValue = window.innerWidth <= 768 ? 'top center+=80' : 'top center';
+
+    textBlocks.forEach((block, index) => {
+      ScrollTrigger.create({
+        trigger: block,
+        start: startValue,
+        end: 'bottom center',
+        onEnter: () => activate(index),
+        onEnterBack: () => activate(index),
+      });
+    });
+
+    function activate(index) {
+      textBlocks.forEach(el => el.classList.remove('active'));
+      images.forEach(img => img.classList.remove('active'));
+      textBlocks[index].classList.add('active');
+      images[index].classList.add('active');
+    }
+
+    activate(0);
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Scroll Image + Text",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Headline Here"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Paragraph",
+          "default": "Some descriptive content goes here."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image-small",
+          "label": "Image Small"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Image + Text",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

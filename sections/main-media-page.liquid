@@ -1,0 +1,350 @@
+{% comment %} main-media-page.liquid - Section for custom Media Page {% endcomment %}
+
+<style>
+  .media-hero {
+    background-image: url({{ section.settings.hero_image | img_url: '1800x' }});
+    background-size: cover;
+    background-position: center;
+    padding: 80px 20px;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    margin-bottom: 40px;
+  }
+
+  .media-breadcrumb {
+    margin: 20px 0;
+    color: #666;
+  }
+
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .media-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .media-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+
+.media-card {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background-size: cover;
+  background-position: center top;
+  position: relative;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.media-card__content {
+  background: white;
+  margin: 0 16px 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+  .media-card img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+  }
+
+  .media-card__logo {
+    margin-bottom: 1rem;
+  }
+  
+  .media-card__logo img {
+    height: 40px;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    margin: 0 auto;
+  }
+
+.media-card__title {
+    margin-bottom: 1rem;
+  }
+
+  .media-card__excerpt {
+    color: #555;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .media-card__author {
+    color: #777;
+    margin-bottom: 1rem;
+  }
+
+  .media-card__readmore {
+    margin-top: 12px;
+  }
+
+  .media-card__readmore a {
+    display: inline-block;
+    color: #0066cc;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+
+  .load-more-button {
+    margin: 40px auto;
+    display: block;
+    padding: 12px 24px;
+    background: #fff;
+    color: #0066cc;
+    border: 1px solid;
+    border-radius: 5px;
+    cursor: pointer;
+    min-width: 312px;
+  }
+
+  .card-count-status {
+    color: #555;
+    margin-bottom: 10px;
+  }
+
+.media-hero {
+  background-image: url("{{ section.settings.hero_image | img_url: '1800x' }}");
+  background-size: cover;
+  background-position: top center;
+  background-repeat: no-repeat;
+  min-height: 392px;
+  text-align: center;
+  padding: 60px 20px;
+  position: relative;
+}
+
+
+  .media-hero h1 {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 40px;
+    border-radius: 6px;
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+  }
+</style>
+
+<div class="page-width">
+  <nav class="media-breadcrumb breadcrumb" role="navigation" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}" title="Home">Home</a>
+    <span class="breadcrumb__separator" aria-hidden="true">›</span>
+    <span>{{ section.settings.page_title }}</span>
+  </nav>
+
+  <div class="media-hero">
+    <h1 class="b2 semibold">{{ section.settings.hero_heading }}</h1>
+  </div>
+
+  <h2 class="home-title regular">{{ section.settings.page_title }}</h2>
+
+  {% assign shown_count = section.settings.initial_count %}
+  {% if shown_count > section.blocks.size %}
+    {% assign shown_count = section.blocks.size %}
+  {% endif %}
+
+  <div id="card-count-status" class="card-count-status b3">
+    Showing {{ shown_count }} of {{ section.blocks.size }} products
+  </div>
+
+  <div id="MediaGrid" class="media-grid">
+    {% for block in section.blocks limit: section.settings.initial_count %}
+     <div class="media-card" style="background-image: url('{{ block.settings.image | img_url: '800x' }}');">
+  <div class="media-card__content">
+    {% if block.settings.logo_image %}
+      <div class="media-card__logo">
+        <img src="{{ block.settings.logo_image | img_url: '200x' }}" alt="Logo">
+      </div>
+    {% endif %}
+    <div class="media-card__title b3 semibold">{{ block.settings.title }}</div>
+    {% if block.settings.author_name %}
+      <div class="media-card__author b3">By {{ block.settings.author_name }}</div>
+    {% endif %}
+    <div class="media-card__excerpt b3">{{ block.settings.description }}</div>
+    {% if block.settings.read_more_link %}
+      <div class="media-card__readmore">
+        <a href="{{ block.settings.read_more_link }}" target="_blank" class="b4 semibold">Read More →</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+    {% endfor %}
+  </div>
+
+  {% if section.blocks.size > section.settings.initial_count %}
+    <button id="loadMoreBtn" class="load-more-button b2 semibold" data-loaded="{{ section.settings.initial_count }}" aria-label="button">Load More</button>
+  {% endif %}
+</div>
+
+<!-- JSON block for Load More functionality -->
+<script type="application/json" id="allCardsJson">
+  [
+    {% for block in section.blocks %}
+      {
+        "title": {{ block.settings.title | json }},
+        "description": {{ block.settings.description | json }},
+        "author_name": {{ block.settings.author_name | json }},
+        "read_more_link": {{ block.settings.read_more_link | json }},
+        "image": {{ block.settings.image | img_url: '600x' | json }},
+        "logo_image": {{ block.settings.logo_image | img_url: '200x' | json }}
+      }{% unless forloop.last %},{% endunless %}
+    {% endfor %}
+  ]
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loadBtn = document.getElementById('loadMoreBtn');
+    if (!loadBtn) return;
+
+    const allCards = JSON.parse(document.getElementById('allCardsJson').textContent);
+    const grid = document.getElementById('MediaGrid');
+    const total = allCards.length;
+    const limit = parseInt(loadBtn.getAttribute('data-loaded'));
+
+    loadBtn.addEventListener('click', function () {
+      let loaded = parseInt(loadBtn.getAttribute('data-loaded'));
+      const next = allCards.slice(loaded, loaded + limit);
+
+      next.forEach(block => {
+  const card = document.createElement('div');
+  card.className = 'media-card';
+  card.style.backgroundImage = `url('${block.image}')`;
+  card.style.backgroundSize = 'cover';
+  card.style.backgroundPosition = 'center top';
+  card.style.minHeight = '500px';
+  card.style.borderRadius = '20px';
+  card.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.08)';
+  card.style.display = 'flex';
+  card.style.flexDirection = 'column';
+  card.style.justifyContent = 'flex-end';
+  card.style.overflow = 'hidden';
+
+  card.innerHTML = `
+    <div class="media-card__content">
+      ${block.logo_image ? `<div class="media-card__logo"><img src="${block.logo_image}" alt="Logo"></div>` : ''}
+      <div class="media-card__title">${block.title}</div>
+      ${block.author_name ? `<div class="media-card__author">BY ${block.author_name}</div>` : ''}
+      <div class="media-card__excerpt">${block.description}</div>
+      ${block.read_more_link ? `<div class="media-card__readmore"><a href="${block.read_more_link}" target="_blank">Read More →</a></div>` : ''}
+    </div>
+  `;
+  grid.appendChild(card);
+});
+
+
+      loaded += limit;
+      document.getElementById('card-count-status').textContent = `Showing ${Math.min(loaded, total)} of ${total} products`;
+      if (loaded >= total) loadBtn.style.display = 'none';
+      loadBtn.setAttribute('data-loaded', loaded);
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Media Page Section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "hero_heading",
+      "default": "Media Page",
+      "label": "Hero Heading"
+    },
+    {
+      "type": "text",
+      "id": "page_title",
+      "default": "Media",
+      "label": "Page Title"
+    },
+    {
+      "type": "range",
+      "id": "initial_count",
+      "min": 3,
+      "max": 20,
+      "step": 1,
+      "default": 6,
+      "label": "Initial cards to show"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "media_card",
+      "name": "Media Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Media Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "logo_image",
+          "label": "Logo Image (PNG)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Short Description"
+        },
+        {
+          "type": "text",
+          "id": "author_name",
+          "label": "Author Name"
+        },
+        {
+          "type": "url",
+          "id": "read_more_link",
+          "label": "Read More URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 50,
+  "presets": [
+    {
+      "name": "Custom Media Page"
+    }
+  ]
+}
+{% endschema %}

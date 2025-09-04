@@ -1,0 +1,194 @@
+/* start review with products */
+.smtestimonials-container {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.smtestimonials-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: inherit;
+  background-size: cover;
+  background-position: center;
+  transition: filter 0.5s ease;
+  z-index: -1;
+}
+
+.smtestimonials-container:hover::before {
+  filter: grayscale(0%);
+}
+
+.smtestimonials-container .user-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 35px 35px 35px;
+}
+.review-section {
+  padding: 2rem 3.2rem 4rem;
+}
+.review-heading {
+  padding: 1rem 0rem 4rem 0rem;
+  margin: 0;
+}
+.desc{
+  margin-bottom: 12px;
+}
+.user-description{
+  margin-bottom: 16px;
+}
+.smtestimonials-container {
+    padding: 12px;
+    border: 0.5px #edecec solid;
+    border-radius: 20px;
+    background-size: cover;
+    background-position: center;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+  .review-procard {
+   border: 0.5px #edecec solid;
+  }
+  #card-info {
+  padding: 1rem 1rem 0;
+  }
+  .user-content {
+    position: relative;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 20px;
+    margin-top: auto;
+  }
+  .user-image-wrapper {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    z-index: 2;
+  }
+  .review-wrapper {
+    position: relative;
+    padding-top: 40px; /* space for image overlap */
+  }
+  .user-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 8px solid #fff;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  }
+  .review-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  row-gap: 12px;
+  }
+  .review-title div{
+      width: 50%;
+      }
+  .reviews-style {color: var(--button-bg-color);}
+  .bannerwithtestimonial .smtestimonial .testimonial-inner {padding-top: 10px; box-shadow: none;}
+  .top_space {margin-top: 5%;}
+  .buy_button {border: 1px solid var(--border-color);border-radius: 0;background-color: var(--button-bg-color);box-shadow: none;color: var(--button-text-color);padding: 8px;}
+  .product-section {background: #fff; padding: 15px 0;}
+  .product-section img {width: 75px !important;float: left;padding: 0 10px;}
+  .product-section p {margin: 0;}
+  .desc h3 {margin-bottom: 0;}
+  .str-style i.fa.fa-star {color: #005f9a;
+}
+  .user-info {margin-bottom:10px !important; }
+  .star-reviews .jdgm-prev-badge__text {display: none;}
+  .star-reviews {padding: 10px 0;}
+  .before-img img {
+  padding-bottom: 10px;
+}
+  #shopify-section-{{ section.id }} {
+    margin-bottom: {{ section.settings.section_bottom_spacing_desktop }}px;
+  }
+   @media (min-width: 1200px) {
+    #shopify-section-{{ section.id }} {
+      margin-top: {{ section.settings.section_top_spacing_desktop }}px;
+    }
+   }
+  
+  @media (max-width: 767px) {
+    .product-section img {width: 120px !important;}
+    .product-section p strong {color: #000;}
+    #shopify-section-{{ section.id }} {
+      margin-bottom: {{ section.settings.section_bottom_spacing_mobile }}px;
+    }
+  }
+  .baimg img{
+    width: auto;
+    height: auto;
+    max-width: 40px;
+    min-width: 40px;
+  }
+  .full-unstyled-link.as {
+    display: -webkit-box;
+    max-width: 100%;
+    margin: 0 auto;
+    line-height: 1.4;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+  .smreview .card-information__wrapper {
+    text-align: left;
+}
+  .smreview .card-information .price {
+    text-align: left;
+}
+  .smreview .price {
+    display: block;
+}
+  .smreview {
+    margin: 10px 0;
+}
+.user-name {
+  padding-top: 3rem;
+}
+.user-location {
+  margin: 0 auto;
+  word-break: break-word;
+}
+  .user-description p {
+    display: -webkit-box;
+    max-width: 100%;
+    margin: 0 auto;
+    line-height: 1.4;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    //padding: 0rem 1rem 3.5rem 1rem;
+    //padding-inline: 35px;
+    }
+
+@media screen and (max-width:767px){
+  .desc{
+    margin-bottom: 8px;
+  }
+  .user-description{
+    margin-bottom: 4px;
+  }
+}
+
+@media screen and (max-width: 850px){
+  .smtestimonials-container .user-content{
+    padding: 0 12px 12px 12px;
+  }
+}
+
+@media screen and (max-width: 375px){
+  .str-style i.fa.fa-star{
+    font-size: 10px;
+  }
+}
+/* End review with products */

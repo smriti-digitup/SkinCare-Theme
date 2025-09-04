@@ -1,0 +1,265 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<style>
+  @media only screen and (min-width: 750px) {
+    .js-recentPdpBlock {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--grid-desktop-horizontal-spacing);
+    }
+    .swiper { display: none; }
+  }
+
+  @media only screen and (max-width: 749px) {
+    .js-recentPdpBlock { display: none; }
+    .swiper { padding: 10px 0; }
+    .swiper-slide { width: 75%; }
+  }
+
+  .c-product {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    position: relative;
+  }
+
+  .c-product:hover { transform: translateY(-5px); }
+
+  .c-product img {
+    height: 250px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .wishlist-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+  }
+
+  .wishlist-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: #016199;
+    stroke-width: 2;
+    transition: fill 0.3s, stroke 0.3s;
+  }
+
+  .wishlist-btn.active svg {
+    fill: #016199;
+    stroke: #016199;
+  }
+
+  .variant-pill-container {
+    margin: 10px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .variant-pill {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f9f9f9;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
+  .variant-pill.active {
+    border-color: #016199;
+    background: #eee;
+  }
+
+  .c-productPrice { margin: 10px 0; }
+</style>
+
+<div class="page-width">
+{% if recommendations.performed and recommendations.products_count > 0 %}
+  <div class="recently-title">
+    <h2 class="home-title inline-richtext scroll-trigger animate--slide-in regular">{{ section.settings.heading }}</h2>
+  </div>
+{% endif %}
+
+
+
+  <!-- Desktop Grid -->
+  <div class="js-recentPdpBlock"></div>
+
+  <!-- Mobile Swiper -->
+  <div class="swiper">
+    <div class="swiper-wrapper js-recentPdpSwiper"></div>
+    <div class="swiper-pagination"></div>
+  </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const gridContainer = document.querySelector('.js-recentPdpBlock');
+    const swiperWrapper = document.querySelector('.js-recentPdpSwiper');
+    const products = JSON.parse(localStorage.getItem('recently_viewed') || '[]');
+    if (!products.length) return;
+
+    const formatMoney = window.Shopify?.formatMoney || function(cents) {
+      return '₹' + (cents / 100).toFixed(2);
+    };
+
+    // Load wishlist from localStorage
+    let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+    function renderCard(product) {
+      const variantButtons = product.variants.map((variant, index) => `
+        <button type="button" class="variant-pill ${index === 0 ? 'active' : ''}" 
+          data-id="${variant.id}" 
+          data-price="${variant.price}" 
+          data-compare="${variant.compare_at_price}">
+          ${variant.title}
+        </button>
+      `).join('');
+
+      const inWishlist = wishlist.some(w => w.handle === product.handle);
+
+      return `
+        <div class="c-product">
+          <!-- Wishlist Button -->
+          <button class="wishlist-btn ${inWishlist ? 'active' : ''}" data-handle="${product.handle}">
+          <svg xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22" fill="none">
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M11.958 4.70801C10.1253 2.56538 7.06904 1.98902 4.77274 3.95103C2.47645 5.91303 2.15316 9.19341 3.95646 11.5139C5.45577 13.4432 9.99323 17.5123 11.4804 18.8293C11.6467 18.9766 11.7299 19.0503 11.827 19.0792C11.9117 19.1045 12.0043 19.1045 12.089 19.0792C12.1861 19.0503 12.2692 18.9766 12.4356 18.8293C13.9228 17.5123 18.4602 13.4432 19.9595 11.5139C21.7628 9.19341 21.479 5.8924 19.1432 3.95103C16.8075 2.00966 13.7907 2.56538 11.958 4.70801Z" stroke="black" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>  
+          </button>
+
+          <div class="c-product__img">
+            <a href="${product.url}">
+              <img src="${product.featured_image}" alt="${product.title}" />
+            </a>
+          </div>
+          <h5 class="c-product__title">
+            <a class="c-product__url card__heading b2 semibold" href="${product.url}">
+              ${product.title}
+            </a>
+          </h5>
+          <form method="post" action="/cart/add" class="variant-form">
+            <div class="variant-pill-container">${variantButtons}</div>
+            <input type="hidden" name="id" value="${product.variants[0].id}">
+            <div class="c-productPrice price">
+              ${product.variants[0].compare_at_price > product.variants[0].price
+                ? `<span class="sale-price b2 semibold">${formatMoney(product.variants[0].price)}</span> 
+                   <span class="compare-price b2 semibold">${formatMoney(product.variants[0].compare_at_price)}</span>`
+                : `<span class="b2 semibold">${formatMoney(product.variants[0].price)}</span>`
+              }
+            </div>
+            <button type="submit" class="button button--primary">Add to cart</button>
+          </form>
+        </div>
+      `;
+    }
+
+    products.forEach(item => {
+      const handle = item.productUrl.split('/products/')[1]?.split('?')[0];
+      if (!handle) return;
+
+      fetch(`/products/${handle}.js`)
+        .then(res => res.json())
+        .then(product => {
+          const cardHtml = renderCard(product);
+
+          // Desktop grid
+          gridContainer.insertAdjacentHTML('beforeend', cardHtml);
+          // Mobile swiper
+          swiperWrapper.insertAdjacentHTML('beforeend', `<div class="swiper-slide">${cardHtml}</div>`);
+
+          // Bind variant switching
+          const forms = document.querySelectorAll('.variant-form');
+          forms.forEach(form => {
+            const pills = form.querySelectorAll('.variant-pill');
+            const hiddenInput = form.querySelector('input[name="id"]');
+            const priceDisplay = form.querySelector('.c-productPrice');
+
+            pills.forEach(btn => {
+              btn.addEventListener('click', () => {
+                pills.forEach(p => p.classList.remove('active'));
+                btn.classList.add('active');
+                hiddenInput.value = btn.dataset.id;
+
+                const price = parseInt(btn.dataset.price, 10);
+                const compare = parseInt(btn.dataset.compare, 10);
+                priceDisplay.innerHTML = compare > price
+                  ? `<span class="sale-price b2 semibold">${formatMoney(price)}</span> 
+                     <span class="compare-price b2 semibold">${formatMoney(compare)}</span>`
+                  : `<span class="b2 semibold">${formatMoney(price)}</span>`;
+              });
+            });
+          });
+
+          // Bind wishlist buttons
+          const wishlistBtns = document.querySelectorAll('.wishlist-btn');
+          wishlistBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+              const handle = btn.dataset.handle;
+              const exists = wishlist.find(p => p.handle === handle);
+
+              if (exists) {
+                // Remove
+                wishlist = wishlist.filter(p => p.handle !== handle);
+                btn.classList.remove('active');
+              } else {
+                // Add
+                wishlist.push({ handle, title: product.title, url: product.url, image: product.featured_image });
+                btn.classList.add('active');
+              }
+              localStorage.setItem('wishlist', JSON.stringify(wishlist));
+            });
+          });
+        })
+        .then(() => {
+          if (!window.recentSwiper) {
+            window.recentSwiper = new Swiper('.swiper', {
+              slidesPerView: 'auto',
+              spaceBetween: 15,
+              pagination: { el: '.swiper-pagination', clickable: true },
+            });
+          }
+        });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Recently Viewed Products",
+  "tag": "section",
+  "class": "recently-viewed-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Recently Viewed"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Recently Viewed Products",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,149 @@
+{{ 'customer.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="customer account section-{{ section.id }}-padding">
+  <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
+  <a href="{{ routes.root_url }}">Home</a>
+  <span class="divider">/</span>
+  <span aria-current="page">{{ 'customer.account.title' | t }}</span>
+`</nav>
+  <div class="order-history-head">
+    <div class="order-history-section">
+      <h2 class="customer-page-heading">{{ 'customer.orders.title' | t }}</h2>
+
+      {% paginate customer.orders by 20 %}
+  {% if customer.orders.size > 0 %}
+    <div class="order-list-wrapper">
+      {% for order in customer.orders %}
+        <div class="order-row">
+          <div class="order-row__item">
+            {{ order.fulfillment_status_label }}
+          </div>
+          <div class="order-row__item">
+            Order ID : {{ order.name }} | {{ order.created_at | time_tag: format: 'date' }}
+          </div>
+        </div>
+        <div class="order-row__products">
+          {% for line_item in order.line_items %}
+            <div class="order-product-card">
+              {% if line_item.image %}
+                <img src="{{ line_item.image | img_url: '100x' }}" alt="{{ line_item.title }}">
+              {% endif %}
+              <div class="product-details">
+                <div class="product-item-detail">
+                <div><h3 class="product-title card__heading h5">{{ line_item.title }}</h3></div>
+                  <div>
+                    <a href="{{ order.customer_url }}" aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}">
+                      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="16" cy="16" r="16" fill="#CDEBFF"/>
+                        <path d="M13 10L19 16L13 22" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </a>
+
+                  </div>
+                </div>
+                 {% if line_item.product.has_only_default_variant == false %}
+                  <div class="product-variant-reorder">
+                    {% for option in line_item.options_with_values %}
+                      <div class="variant-pill">{{ option.value }}</div>
+                    {% endfor %}
+                    
+                    <form method="post" action="/cart/add" class="reorder-form">
+                      <input type="hidden" name="id" value="{{ line_item.variant_id }}">
+                      <input type="hidden" name="quantity" value="{{ line_item.quantity }}">
+                      <button type="submit" class="reorder-btn">REORDER</button>
+                    </form>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>{{ 'customer.orders.none' | t }}</p>
+  {% endif %}
+
+  {% if paginate.pages > 1 %}
+    <nav class="pagination" role="navigation">
+      <ul>
+        {% if paginate.previous %}
+          <li><a href="{{ paginate.previous.url }}">←</a></li>
+        {% endif %}
+        {% for part in paginate.parts %}
+          <li>
+            {% if part.is_link %}
+              <a href="{{ part.url }}">{{ part.title }}</a>
+            {% else %}
+              <span>{{ part.title }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+        {% if paginate.next %}
+          <li><a href="{{ paginate.next.url }}">→</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+{% endpaginate %}
+
+    </div>
+
+    <div class="address-box">
+      <h3>{{ 'customer.account.details' | t }}</h3>
+
+      {{ customer.default_address | format_address }}
+
+     <button class="button button--primary" onclick="window.location.href='{{ routes.account_addresses_url }}'" aria-label="view-address">
+        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+     </button>
+      
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-account.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}

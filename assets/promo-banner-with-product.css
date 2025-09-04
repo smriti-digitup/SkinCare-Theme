@@ -1,0 +1,122 @@
+.promo-banner {
+  //position: relative;
+  background-size: cover;
+  background-position: center;
+  padding: 40px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 20px;
+  color: #000;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: 5px;
+}
+.promo-banner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #CFCFCF36;
+  z-index: 1;
+}
+.promo-banner__text .semibold{
+  font-size: 24px;
+}
+@media screen and (max-width: 768px){
+  text-align: center;
+}
+.promo-banner__text,
+.promo-banner__product {
+  position: relative;
+  z-index: 2;
+}
+.promo-banner__product p{
+  font-size: 18px;
+}
+.promo-banner__product span{
+  font-size: 16px;
+}
+.promo-banner__text {
+  max-width: 45%;
+}
+.promo-banner__text *{
+  text-align: left;
+}
+.promo-banner__text .title {
+  color: #00609D;
+  margin: 0;
+}
+.promo-banner__text .subtitle{
+  font-weight: 600;
+}
+.promo-banner__text .discount{
+  color: unset;
+  margin: unset;
+}
+.promo-banner__text h3:not(.semibold) {
+  color: #00609D;
+  margin: 1rem 0;
+}
+.promo-banner__text h4 {
+  color: #000;
+  margin: 0;
+}
+.promo-banner__text p {
+  margin: 1rem 0;
+}
+.promo-banner__product {
+  background: #2D2D2D33;
+  border-radius: 5px;
+  padding: 14px 18px;
+  max-width: 250px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+ // min-width: 315px;
+  margin-bottom: 1.6rem;
+}
+.promo-banner__product img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+.promo-banner__product h4 {
+  margin-bottom: 1rem;
+  margin-top: 0;
+  color: #000;
+}
+.promo-banner__product span {
+  display: block;
+  color: #000;
+  margin-bottom: 1.6rem;
+}
+.promo-banner__product .btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #0052cc;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+}
+@media screen and (max-width:768px){
+  .promo-banner{
+    padding: 20px;
+    flex-direction: column;
+  }
+  .promo-banner__text{
+    width: 100%;
+    max-width: unset;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .promo-banner__text .title{
+    text-align: center;
+  }
+  .promo-banner__product{
+    padding: 10px 12px;
+    width: 80vw;
+    max-width: unset;
+  }
+  .promo-banner__product img {
+    padding-inline: 10px;
+  }
+}

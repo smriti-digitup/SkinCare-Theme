@@ -1,0 +1,33 @@
+{%- comment -%}
+  Renders size variant pills
+  Sold-out sizes are shown with a disabled class
+  Requires:
+    - card_product: the product object
+    - size_values: array of size values (like: ['S', 'M', 'L', 'XL'])
+{%- endcomment -%}
+
+{%- assign size_option_index = nil -%}
+
+{%- for option in card_product.options -%}
+  {%- if option == 'Size' -%}
+    {%- assign size_option_index = forloop.index0 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if size_option_index != nil -%}
+  {%- for value in size_values -%}
+    {%- assign is_available = false -%}
+
+    {%- for variant in card_product.variants -%}
+      {%- assign variant_size = variant.options[size_option_index] -%}
+      {%- if variant_size == value and variant.available -%}
+        {%- assign is_available = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <div class="variant-pill b3 regular {% unless is_available %} variant-pill--sold-out{% endunless %}">
+      {{ value }}
+    </div>
+  {%- endfor -%}
+{%- endif -%}

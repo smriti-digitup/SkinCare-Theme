@@ -1,0 +1,31 @@
+{%- render 'cart-drawer' -%}
+
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": [
+    {
+      "type": "select",
+      "id": "enable_recommended",
+      "label": "Enable Recommended Products",
+      "options": [
+        {
+          "value": "false",
+          "label": "No"
+        },
+        {
+          "value": "true",
+          "label": "Complementary Products Only"
+        },
+        {
+          "value": "both",
+          "label": "Complementary and Related Products"
+        }
+      ],
+      "default": "false",
+      "info": "When option 3 is selected, if there are no complementary products, related products will show instead"
+    }
+  ]
+}
+{% endschema %}

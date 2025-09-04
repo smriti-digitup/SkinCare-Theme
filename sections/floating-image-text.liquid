@@ -1,0 +1,431 @@
+<style>
+.in-view {
+  transform: translateY(0) !important;
+}
+
+.mySwiperRight, .mySwiper{
+  padding-top: 3rem !important;
+}
+
+.mySwiperRight {
+  width: 50vw !important; /* right swiper is wider */
+  overflow: hidden;
+  margin: unset !important;
+  height: calc(100% + 200px);
+  transform: translateY(-160px) !important;
+}
+
+.mySwiper {
+  width: 30vw !important; /* restrict left swiper */
+  overflow: hidden;
+  margin: unset !important;
+}
+
+.left-swiper .swiper-slide img {
+  width: 8vw !important;
+  max-width: 120px;
+  min-width: 75px;
+  height: 8vw !important;
+  max-height: 120px;
+  min-height: 75px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.right-swiper .swiper-slide img {
+  //height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.floating-row-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px 30px 0 30px;
+  padding-block: 50px;
+}
+
+.text-content {
+  position: absolute;
+  flex: 1;
+  width: 35%;
+  z-index: 1;
+  transform: translateY(-15px);
+  transition: transform 0.6s ease;
+}
+
+.animated-heading,
+.animated-heading1 {
+  text-align: left;
+}
+
+.animated-heading1 {
+  color: #005f9a;
+}
+
+/* Dual Swiper container */
+.dual-swiper-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 0;
+  padding: 5rem 0;
+  z-index: 0;
+  
+}
+.swiper-slide {
+  display: flex !important;
+  flex: 0 0 auto !important;
+  flex-direction: column;
+  justify-content: end;
+  align-items: center;
+  transition: transform 0.6s ease-in-out;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+}
+
+.image-content {
+  text-align: center;
+}
+.image-content .image-content-heading{
+  min-height: 40px
+}
+.image-content .image-content-info {
+  margin: 0;
+}
+  
+.image-content-btn {
+  text-decoration: none;
+}
+
+@media screen and (min-width: 1025px){
+  .animated-below-elements .regular{
+    text-align: left;
+  }
+
+  .swiper-slide.image.image-5{
+    transform: translateY(50px) scale(0.8);
+  }
+
+  .swiper-slide.image.image-6{
+    transform: translateY(-80px) scale(1.1);
+  }
+
+  .swiper-slide.image.image-7{
+    transform: translateY(-150px) scale(0.8);
+  }
+}
+
+@media (max-width: 1024px) {
+  .floating-row-wrapper {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+    gap: 0;
+  }
+
+  .floating-row-wrapper .animated-heading1{
+    text-align: center;
+  }
+
+  .text-content {
+    width: 100%;
+    position: relative;
+  }
+
+  .dual-swiper-wrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 1rem 0;
+  }
+  .mySwiper{
+    width: 70% !important;
+    min-width: 300px;
+  }
+  .mySwiperRight{
+    transform: translateY(0) !important;
+    width: 90vw !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .swiper-slide {
+    width: 100%;
+  }
+}
+
+.heading-hover-wrapper {
+  display: inline-block;
+}
+
+.floating-row-wrapper:hover .animated-heading {
+  transform: translateY(20px);
+}
+
+.floating-row-wrapper .animated-heading {
+  transition: transform 0.6s ease-in-out;
+}
+
+.floating-row-wrapper:hover .animated-heading1 {
+  transform: translateY(-10px);
+}
+
+.floating-row-wrapper .animated-heading1 {
+  transition: transform 0.6s ease-in-out;
+}
+
+.floating-row-wrapper:hover .animated-below-elements {
+  transform: translateY(-40px);
+}
+
+.animated-below-elements {
+  z-index: 1;
+  transition: transform 0.6s ease-in-out;
+}
+
+.animated-image-block {
+  transition: transform 0.6s ease-in-out;
+}
+
+.animated-image-block-right {
+  transition: transform 0.6s ease-in-out;
+}
+
+.floating-row-wrapper:hover .swiper-slide {
+  transform: translateY(-20px);
+}
+
+.swiper-slide.image.swiper-slide-active{
+  object-fit: contain;
+}
+
+.text-content h2, .text-content h3{
+  margin: 0;
+  margin-bottom: 28px;
+}
+</style>
+
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<div class="page-width floating-row-wrapper collection--full-width">
+  
+  <!-- Text column -->
+  <div class="text-content scroll-animate">
+    <div class="heading-hover-wrapper">
+      <h3 class="home-title animated-heading regular">{{ section.settings.heading }}</h3>
+      <h2 class="home-title animated-heading1">{{ section.settings.heading2 }}</h2>
+    </div>
+    <div class="animated-below-elements">
+      <h2 class="regular">{{ section.settings.paragraph }}</h2>
+      <a href="{{ section.settings.button_url }}" class="button button--primary">
+        {{ section.settings.button_text }}
+      </a>
+    </div>
+  </div>
+
+  <!-- Dual Swiper wrapper -->
+  <div class="dual-swiper-wrapper">
+    
+    <!-- LEFT Swiper -->
+    <div class="swiper mySwiper scroll-animate left-swiper">
+      <div class="swiper-wrapper">
+        {% assign total_needed = 12 %}
+        {% assign current_index = 0 %}
+        
+        {% for i in (1..total_needed) %}
+          {% assign block = section.blocks[current_index] %}
+          
+          {% if block.settings.image %}
+            <div class="swiper-slide image">
+              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
+            </div>
+          {% endif %}
+          
+          {% assign current_index = current_index | plus: 1 %}
+          {% if current_index >= section.blocks.size %}
+            {% assign current_index = 0 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- RIGHT Swiper -->
+    <div class="swiper mySwiperRight scroll-animate right-swiper">
+      <div class="swiper-wrapper">
+        {% assign total_needed = 12 %}
+        {% assign current_index = 0 %}
+        
+        {% for i in (1..total_needed) %}
+          {% assign block = section.blocks[current_index] %}
+          
+          {% if block.settings.image %}
+            <div class="swiper-slide image">
+              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
+              {% if block.type == 'main_image' %}
+                <div class="image-content">
+                  <p class="image-content-heading b2 semibold">{{ block.settings.heading }}</p>
+                  <p class="image-content-info b3">{{ block.settings.paragraph }}</p>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          
+          {% assign current_index = current_index | plus: 1 %}
+          {% if current_index >= section.blocks.size %}
+            {% assign current_index = 0 %}
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer="defer"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const swiperRight = new Swiper(".mySwiperRight", {
+    spaceBetween: 30,
+    loop: true,
+    allowTouchMove: false,
+    speed: 800,
+    breakpoints: {
+      1024: { slidesPerView: 3 },
+      768: { slidesPerView: 2 },
+    },
+  });
+
+  const swiperLeft = new Swiper(".mySwiper", {
+    slidesPerView: 3,
+    spaceBetween: 20,
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
+    speed: 800
+  });
+
+  // ---- Helpers ------------------------------------------------------------
+  function getOriginalLength(swiper) {
+    return Array.from(swiper.slides)
+      .filter(s => !s.classList.contains('swiper-slide-duplicate')).length;
+  }
+
+  function clearImageClasses(swiper) {
+    Array.from(swiper.slides).forEach(slide => {
+      slide.className = slide.className.replace(/\bimage-\d+\b/g, '').trim();
+    });
+  }
+
+  // Modified: allow count override
+  function setImageClassesByActive(swiper, classStart, countOverride = null) {
+    // only apply dynamic classes on desktop
+    if (window.innerWidth <= 1024) {
+      clearImageClasses(swiper);
+      return;
+    }
+
+    clearImageClasses(swiper);
+    const slides = Array.from(swiper.slides);
+    const count = countOverride || swiper.params.slidesPerView;
+    const start = swiper.activeIndex || 0;
+
+    for (let i = 0; i < count; i++) {
+      const idx = (start + i) % slides.length;
+      slides[idx].classList.add(`image-${classStart + i}`);
+    }
+  }
+
+  function syncRightToLeft(offset = 3, speed = 800) {
+    const origLenR = getOriginalLength(swiperRight);
+    const targetReal = (swiperLeft.realIndex + offset) % origLenR;
+    swiperRight.slideToLoop(targetReal, speed, false);
+  }
+
+  // ---- Initial sync -------------------------------------------------------
+  syncRightToLeft(3, 0);
+  setImageClassesByActive(swiperLeft, 1);       // image-1 → image-3
+  setImageClassesByActive(swiperRight, 4, 4);   // image-4 → image-7
+
+  // ---- Events -------------------------------------------------------------
+  swiperLeft.on('slideChangeTransitionStart', () => {
+    syncRightToLeft(3, 800);
+    setImageClassesByActive(swiperLeft, 1);      // image-1 → image-3
+    setImageClassesByActive(swiperRight, 4, 4);  // image-4 → image-7
+  });
+
+  swiperRight.on('slideChangeTransitionStart', () => {
+    setImageClassesByActive(swiperRight, 4, 4);  // image-4 → image-7
+  });
+
+  // ---- Reapply on resize --------------------------------------------------
+  window.addEventListener("resize", () => {
+    setImageClassesByActive(swiperLeft, 1);
+    setImageClassesByActive(swiperRight, 4, 4);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Img Text Swiper",
+  "tag": "section",
+  "class": "floating-image-row-section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Heading" },
+    { "type": "text", "id": "heading2", "label": "Subheading", "default": "Heading 2" },
+    {
+      "type": "textarea",
+      "id": "paragraph",
+      "label": "Paragraph",
+      "default": "These images float horizontally side by side."
+    },
+    { "type": "text", "id": "button_text", "label": "Button Text", "default": "Explore More" },
+    { "type": "url", "id": "button_url", "label": "Button Link" }
+  ],
+  "blocks": [
+    {
+      "type": "circle_image",
+      "name": "Circle Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Circle Image" }
+      ]
+    },
+    {
+      "type": "main_image",
+      "name": "Main Image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Main Image" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Heading" },
+        { "type": "textarea", "id": "paragraph", "label": "Paragraph", "default": "Description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Img Text Swiper",
+      "category": "Custom",
+      "blocks": [
+        { "type": "circle_image" },
+        { "type": "circle_image" },
+        { "type": "circle_image" },
+        { "type": "main_image" },
+        { "type": "main_image" },
+        { "type": "main_image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

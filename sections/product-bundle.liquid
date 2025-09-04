@@ -1,0 +1,204 @@
+{% comment %}
+  This section displays bundled products based on a "bundle:" tag in the current product.
+  Example tag: bundle:product-handle-1|product-handle-2
+{% endcomment %}
+
+{{ 'product-bundle.css' | asset_url | stylesheet_tag }}
+
+
+{% assign bundle_tag = '' %}
+{% for tag in product.tags %}
+  {% if tag contains 'bundle:' %}
+    {% assign bundle_tag = tag %}
+    {% break %}
+  {% endif %}
+{% endfor %}
+
+{% if bundle_tag != '' %}
+  {% assign bundle_handles = bundle_tag | remove: "bundle:" | split: "|" %}
+  <div class="bundle-wrapper">
+    <h2 class="home-title regular {{ section.settings.heading_size }}">{{ section.settings.heading_text }}</h2>
+    <div class="bundle-products">
+      {% for handle in bundle_handles %}
+        {% assign bundled_product = all_products[handle] %}
+        {% if bundled_product %}
+          <div class="bundle-product"
+               data-handle="{{ bundled_product.handle }}"
+               data-price="{{ bundled_product.price }}"
+               data-compare-price="{{ bundled_product.compare_at_price }}">
+            <div class="image-check">
+              <input type="checkbox" class="bundle-checkbox" checked>
+              <img src="{{ bundled_product.featured_image | image_url: width: 300 }}" alt="{{ bundled_product.title }}">
+            </div>
+            <div>
+              <h4 class="b2 semibold">{{ bundled_product.title }}</h4>
+              <p class="b3">{{ bundled_product.description | strip_html | truncate: 80 }}</p>
+              <p>
+                {% if bundled_product.compare_at_price > bundled_product.price %}
+                  <span class="compare-price">{{ bundled_product.compare_at_price | money }}</span>
+                  <span class="actual-price b2">{{ bundled_product.price | money }}</span>
+                {% else %}
+                  <span class="actual-price b2">{{ bundled_product.price | money }}</span>
+                {% endif %}
+              </p>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="bundle-footer">
+      <div class="bundle-footer-prices">Total Amount:
+        <strong class="bundle-footer-text b2">
+          ₹<span id="bundle-total" class="b2">0.00</span>
+        </strong>
+        <strong class="bundle-footer-text b2">
+          <span class="compare-price b2">₹<span id="bundle-original-total">0.00</span></span>
+        </strong>
+        <span class="bundle-footer-text b2" id="bundle-discount-label">({{ section.settings.discount_percent }}% Off)</span>
+      </div>
+
+      <button class="button--primary b2 semibold" id="add-bundle-to-cart">Add all to cart</button>
+    </div>
+  </div>
+{% elsif section.settings.show_when_empty %}
+  <p>{{ section.settings.empty_message }}</p>
+{% endif %}
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function updateTotal() {
+      let originalTotal = 0;
+      document.querySelectorAll('.bundle-product').forEach(function (el) {
+        const checkbox = el.querySelector('.bundle-checkbox');
+        if (checkbox && checkbox.checked) {
+          originalTotal += parseFloat(el.dataset.comparePrice || el.dataset.price || 0) / 100;
+        }
+      });
+
+      let discountedTotal = originalTotal;
+      {% if section.settings.show_discount %}
+        const discount = {{ section.settings.discount_percent }};
+        discountedTotal = originalTotal * (1 - discount / 100);
+      {% endif %}
+
+      const originalEl = document.getElementById('bundle-original-total');
+      const totalEl = document.getElementById('bundle-total');
+      const discountLabel = document.getElementById('bundle-discount-label');
+
+      if (originalEl) originalEl.innerText = originalTotal.toFixed(2);
+      if (totalEl) totalEl.innerText = discountedTotal.toFixed(2);
+      if (discountLabel && originalTotal !== discountedTotal) {
+        discountLabel.innerText = `({{ section.settings.discount_percent }}% Off)`;
+        discountLabel.style.display = 'inline';
+      } else if (discountLabel) {
+        discountLabel.style.display = 'none';
+      }
+    }
+
+    document.querySelectorAll('.bundle-checkbox').forEach(function (checkbox) {
+      checkbox.addEventListener('change', updateTotal);
+    });
+
+    updateTotal();
+
+    const addButton = document.getElementById('add-bundle-to-cart');
+    if (addButton) {
+      addButton.addEventListener('click', async function () {
+        const selectedProducts = Array.from(document.querySelectorAll('.bundle-product'))
+          .filter(el => el.querySelector('.bundle-checkbox')?.checked);
+
+        if (selectedProducts.length === 0) {
+          alert("Please select at least one product to add.");
+          return;
+        }
+
+        for (const el of selectedProducts) {
+          const handle = el.dataset.handle;
+          if (!handle) continue;
+
+          try {
+            const response = await fetch(`/products/${handle}.js`);
+            const product = await response.json();
+
+            const variantId = product?.variants?.[0]?.id;
+            if (!variantId) continue;
+
+            await fetch('/cart/add.js', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ id: variantId, quantity: 1 })
+            });
+          } catch (error) {
+            console.error('Error adding product:', error);
+          }
+        }
+
+        // Open cart drawer if available
+        const cartToggle = document.querySelector('[aria-controls="CartDrawer"]');
+        if (cartToggle) cartToggle.click();
+        else window.location.href = '/cart';
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Product Bundle",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading",
+      "default": "Buy Together & Save up to 30%"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "default": "h2",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "show_discount",
+      "label": "Apply bundle discount",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "discount_percent",
+      "label": "Discount Percentage",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "default": 30
+    },
+    {
+      "type": "checkbox",
+      "id": "show_when_empty",
+      "label": "Show message if no bundle found",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "Empty message text",
+      "default": "No bundle products found for this product."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Bundle",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}

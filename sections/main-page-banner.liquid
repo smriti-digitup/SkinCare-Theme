@@ -1,0 +1,94 @@
+{{ 'custom-blog.css' | asset_url | stylesheet_tag }}
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="about page-width section-{{ section.id }}-padding">
+  <nav class="breadcrumb" role="navigation" aria-label="breadcrumbs">
+    <a href="{{ routes.root_url }}" title="Home">Home</a>
+    <span class="breadcrumb__separator" aria-hidden="true">›</span>
+    <span>{{ page.title | escape }}</span>
+  </nav>
+
+  {%- if section.settings.banner_image != blank -%}
+    <div class="main-blog-banner" style="background-image: url({{ section.settings.banner_image | img_url: '1800x' }});">
+      <div class="main-blog-banner__content">
+        {%- if section.settings.banner_heading != blank -%}
+          <h1 class="main-blog-banner__heading semibold">{{ section.settings.banner_heading }}</h1>
+        {%- endif -%}
+        {%- if section.settings.banner_subheading != blank -%}
+          <p class="main-blog-banner__subheading b1 semibold">{{ section.settings.banner_subheading }}</p>
+        {%- endif -%}
+        {%- if section.settings.banner_subtext != blank -%}
+          <p class="main-blog-banner__subtext b1">{{ section.settings.banner_subtext }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Main page Banner",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header Banner Settings"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "text",
+      "id": "banner_heading",
+      "label": "Banner Heading",
+      "default": "Radiant Skin Starts Here"
+    },
+    {
+      "type": "text",
+      "id": "banner_subheading",
+      "label": "Banner Subheading",
+      "default": "FIXDERMA COSMETIC LABORATORIES"
+    },
+    {
+      "type": "text",
+      "id": "banner_subtext",
+      "label": "Banner Subtext",
+      "default": "Explore our curated range of face care essentials for a luminous complexion"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "default": 40,
+      "min": 0,
+      "max": 120,
+      "step": 4
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "default": 40,
+      "min": 0,
+      "max": 120,
+      "step": 4
+    }
+  ],
+  "presets": [{ "name": "Main-page-banner", "category": "Custom" }]
+}
+{% endschema %}

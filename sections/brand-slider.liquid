@@ -1,0 +1,82 @@
+<div class="collection--full-width page-width">
+  {% if section.settings.heading != blank %}
+    <h2 class="home-title regular brand-slider-heading {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }}
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+        style="--animation-order: {{ forloop.index }};"
+      {% endif %}>{{ section.settings.heading }}</h2>
+  {% endif %}
+<div class="brand-slider">
+    <div class="owl-carousel brand-carousel {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" {{ block.shopify_attributes }}
+      {% if settings.animations_reveal_on_scroll %}
+        data-cascade
+        style="--animation-order: {{ forloop.index }};"
+      {% endif %}>
+      {% for block in section.blocks %}
+        <div class="brand-item">
+          {% if block.settings.brand_logo != blank %}
+            <img src="{{ block.settings.brand_logo | image_url: width: 200 }}" alt="{{ block.settings.brand_name | escape }}">
+          {% else %}
+            <span>No Image</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+</div>
+</div>
+  
+  <script defer>
+  document.addEventListener("DOMContentLoaded", function() {
+    $('.brand-carousel').owlCarousel({
+      loop: false,
+      margin: 20,
+      nav: false,
+      autoplay: true,
+      autoplayTimeout: 3000,
+      responsive: {
+        0: { items: 3 },
+        600: { items: 3 },
+        1000: { items: 5 }
+      }
+    });
+  });
+  </script>
+  
+  {% schema %}
+  {
+    "name": "Brand Slider",
+    "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Our Brand Partners"
+    }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Brand Logo",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "brand_logo",
+            "label": "Brand Logo"
+          },
+          {
+            "type": "text",
+            "id": "brand_name",
+            "label": "Brand Name"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Brand Slider",
+        "category": "Custom"
+      }
+    ]
+  }
+  {% endschema %}
+  

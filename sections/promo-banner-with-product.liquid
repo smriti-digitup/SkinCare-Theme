@@ -1,0 +1,81 @@
+{{ 'promo-banner-with-product.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width promo-banner {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" style="background-image: url({{ section.settings.bg_image | img_url: '1800x' }});">
+  <div class="promo-banner__text">
+    <h3 class="semibold">{{ section.settings.tagline }}</h3>
+    <h2 class="title">{{ section.settings.title }}</h2>
+    <h3 class="b1 subtitle">{{ section.settings.subtitle }}</h3>
+    <h2 class="discount">{{ section.settings.discount_text }}</h2>
+  </div>
+
+  {% if section.settings.product != blank %}
+    {% assign product = all_products[section.settings.product] %}
+    {% if product %}
+      <div class="promo__product">
+        <div class="promo-banner__product"><p class="b2 semibold ellipsis">{{ product.title }}</p>
+        <span class="b3 regular">{{ section.settings.product_offer_text }}</span>
+        <img src="{{ product.featured_image | img_url: '300x' }}" alt="{{ product.title }}">
+        </div>
+        <a href="{{ product.url }}" class="button button--primary">Buy Now</a>
+      </div>
+    {% else %}
+      <p style="color:red;">⚠ Product not found via all_products.</p>
+    {% endif %}
+  {% else %}
+    <p style="color:red;">⚠ No product selected in Theme Editor.</p>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Promo Banner with Product",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background Image"
+    },
+    {
+      "type": "text",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "Elevate Your Skin Health With"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Main Title",
+      "default": "Skin Brightening"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "MEGA SALE"
+    },
+    {
+      "type": "text",
+      "id": "discount_text",
+      "label": "Discount Text",
+      "default": "30% Off"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured Product"
+    },
+    {
+      "type": "text",
+      "id": "product_offer_text",
+      "label": "Product Offer Text",
+      "default": "Extra 10% Off on first purchase"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Banner with Product"
+    }
+  ]
+}
+{% endschema %}
+

@@ -1,0 +1,77 @@
+{% schema %}
+{
+  "name": "Product FAQs",
+  "tag": "section",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Product FAQs"
+    }
+  ]
+}
+{% endschema %}
+
+{% if product.metafields.custom.product_faq != blank %}
+  <div class="faq-section page-width">
+    <h2 class="home-title regular">Frequently Asked Questions</h2>
+    {% assign faq_lines = product.metafields.custom.product_faq | newline_to_br | split: '<br />' %}
+
+    {% assign question = '' %}
+    {% assign answer = '' %}
+    {% for line in faq_lines %}
+      {% if line contains 'Q:' %}
+        {% if question != '' %}
+          <details class="faq-item">
+            <summary class="b2 faq-item-main">
+              <h3 class="accordion__title inline-richtext h4">{{ question }}</h3>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <path d="M11.0007 7.33304V14.6664M7.33398 10.9997H14.6673M20.1673 10.9997C20.1673 16.0623 16.0633 20.1664 11.0007 20.1664C5.93804 20.1664 1.83398 16.0623 1.83398 10.9997C1.83398 5.93709 5.93804 1.83304 11.0007 1.83304C16.0633 1.83304 20.1673 5.93709 20.1673 10.9997Z" stroke="#00609D" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </summary>
+            <div class="faq-answer b2">{{ answer }}</div>
+          </details>
+        {% endif %}
+        {% assign question = line | remove: 'Q:' | strip %}
+        {% assign answer = '' %}
+      {% elsif line contains 'A:' %}
+        {% assign answer = line | remove: 'A:' | strip %}
+      {% else %}
+        {% assign answer = answer | append: ' ' | append: line %}
+      {% endif %}
+    {% endfor %}
+
+    {% if question != '' %}
+      <details class="faq-item">
+        <summary>{{ question }}</summary>
+        <div class="faq-answer">{{ answer }}</div>
+      </details>
+    {% endif %}
+  </div>
+
+  <style>
+    .faq-section {
+      margin-top: 9rem;
+    }
+    .faq-item {
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .faq-item summary {
+      cursor: pointer;
+      padding: 2.5rem;
+      background: #fff;
+    }
+    .faq-answer {
+      padding: 0 2.5rem 2.5rem 2.5rem;
+      background-color: white;
+      //border-top: 1px solid #eee;
+      line-height: 24px;
+    }
+    .faq-item-main
+    {
+    display: flex;
+    justify-content: space-between;
+    }
+  </style>
+{% endif %}

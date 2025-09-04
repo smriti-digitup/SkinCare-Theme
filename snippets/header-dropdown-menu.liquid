@@ -1,0 +1,120 @@
+<nav class="header__inline-menu">
+  <ul class="list-menu list-menu--inline" role="list">
+    {%- for link in section.settings.menu.links -%}
+      <li class="menu-item">
+        {% assign link_title = link.title | strip %}
+
+        {% if link.links != blank %}
+          {% if link_title == 'Shop' %}
+  <div class="mega-menu-wrapper">
+    <a
+      href="#"
+      class="header__menu-item list-menu__item link focus-inset b2 regular"
+    >
+      {{ link.title | escape }}
+    </a>
+
+    <div class="mega-menu full-width-mega">
+      <div class="mega-menu__inner">
+        {%- for child_link in link.links -%}
+          <div class="mega-menu__column">
+            <h4><a href="{{ child_link.url }}"><b>{{ child_link.title }}</b></a></h4>
+            {% if child_link.links != blank %}
+              <ul>
+                {% for grandchild_link in child_link.links %}
+                  <li><a href="{{ grandchild_link.url }}" class="list-menu__item">{{ grandchild_link.title }}</a></li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      <!-- Bottom Product Row (custom HTML) -->
+      <div class="page-width mega-menu__product-row">
+        <div class="product-tile">
+          <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/61e0b940121b71018f3782e9926934f9eb781d00_1.png?v=1752482667" alt="Face Wash">
+          <a href="/collections/face-wash">Face Wash</a>
+        </div>
+        <div class="product-tile">
+          <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/b90af0cfe379d91737ad82ed8e4fdc241230c60a_1.png?v=1752482667" alt="Serum">
+          <a href="/collections/serum">Serum</a>
+        </div>
+        <div class="product-tile">
+          <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/7eb78a0574051af18dd328794277f2c4b868ee57_1.png?v=1752482667" alt="Sunscreen">
+          <a href="/collections/sunscreen">Sunscreen</a>
+        </div>
+        <div class="product-tile">
+          <img src="https://cdn.shopify.com/s/files/1/0477/0503/0820/files/30cb359d21d949171e3446bed3a12c585d65bf77_1.png?v=1752482667" alt="Shampoo">
+          <a href="/collections/shampoo">Shampoo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+          {% else %}
+           <div class="menu-item hover-menu">
+  <a
+    href="#"
+    class="header__menu-item list-menu__item link focus-inset"
+  >
+    <span
+      {%- if link.child_active %}
+        class="header__active-menu-item b2 regular"
+      {% endif %}
+    >
+      {{- link.title | escape -}}
+    </span>
+    {{- 'icon-caret.svg' | inline_asset_content -}}
+  </a>
+
+  <ul
+    class="hover-submenu header__submenu list-menu color-{{ section.settings.menu_color_scheme }} gradient b2 regular"
+    role="list"
+  >
+    {%- for childlink in link.links -%}
+      <li>
+        {%- if childlink.links == blank -%}
+          <a
+            href="{{ childlink.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset b2 regular"
+          >
+            {{ childlink.title | escape }}
+          </a>
+        {%- else -%}
+          <div class="sub-hover-menu">
+            <a
+              href="{{ childlink.url }}"
+              class="header__menu-item list-menu__item link link--text focus-inset b2 regular"
+            >
+              <span class="b2 regular">{{ childlink.title | escape }}</span>
+              {{ 'icon-caret.svg' | inline_asset_content }}
+            </a>
+            <ul class="header__submenu list-menu">
+              {%- for grandchildlink in childlink.links -%}
+                <li>
+                  <a href="{{ grandchildlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset b2 regular">
+                    {{ grandchildlink.title | escape }}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+          {% endif %}
+        {% else %}
+          <a
+            href="{{ link.url }}"
+            class="header__menu-item list-menu__item link link--text focus-inset"
+          >
+            <span class="b2 regular">{{ link.title | escape }}</span>
+          </a>
+        {% endif %}
+      </li>
+    {%- endfor -%}
+  </ul>
+</nav>

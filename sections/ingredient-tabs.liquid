@@ -1,0 +1,222 @@
+{{ 'ingredient-tabs.css' | asset_url | stylesheet_tag }}
+
+<div class="page-width ingredient-tabs-wrapper {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" id="ingredient-tabs-{{ section.id }}">
+  {% if section.settings.heading != blank %}
+    <h2 class="home-title ingredient-tabs-heading regular">{{ section.settings.heading }}</h2>
+  {% endif %}
+
+  <div class="ingredient-tabs {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    {% for block in section.blocks %}
+      <div class="ingredient-tab {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
+        {% if block.settings.icon %}
+          <img src="{{ block.settings.icon | image_url }}" class="ingredient-icon" alt="{{ block.settings.tab_title }}">
+        {% endif %}
+        <span class="b1 regular">{{ block.settings.tab_title }}</span>
+      </div>
+    {% endfor %}
+  </div>
+
+  <div class="ingredient-contents {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+    {% for block in section.blocks %}
+      <div class="ingredient-tab-content {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
+        <div class="ingredient-text ">
+          <h2 class="home-title">{{ block.settings.title }}</h2>
+          <p class="b1 regular">{{ block.settings.description }}</p>
+          <a href="{{ block.settings.button_url }}" class="button button--primary">
+            {{ block.settings.button_text }}
+          </a>
+        </div>
+
+        <div class="ingredient-image {% if forloop.first %}active{% endif %} gsap-image">
+          <div class="ingredient-layered-wrapper">
+            {% if block.settings.blob_image != blank %}
+              <img class="ingredient-bg-image" src="{{ block.settings.blob_image | image_url: width: 800 }}" alt="Background Image">
+            {% endif %}
+            {% if block.settings.image1 != blank %}
+              <div class="foreground-box gsap-product-card">
+                <div class="text-overlay">
+                  <p class="b2 semibold">{{ block.settings.title_Product }}</p>
+                  <p class="b3 regular">{{ block.settings.description_discount }}</p>
+                </div>
+                <div>
+                  <a href="{{ block.settings.product_url }}" target="_blank">
+                    <img src="{{ block.settings.image1 | image_url: width: 200 }}" alt="Foreground Image">
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const section = document.querySelector('#ingredient-tabs-{{ section.id }}');
+  if (!section) return;
+
+  const tabs = section.querySelectorAll('.ingredient-tab');
+  const contents = section.querySelectorAll('.ingredient-tab-content');
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Animate section heading on scroll
+  gsap.from('.ingredient-tabs-heading', {
+    y: 60,
+    opacity: 0,
+    duration: 1,
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 90%',
+    }
+  });
+
+  // Initial animation for first visible tab on page load
+  const initialBg = section.querySelector('.ingredient-tab-content.active .ingredient-bg-image');
+  const initialCard = section.querySelector('.ingredient-tab-content.active .gsap-product-card');
+
+  if (initialBg) {
+    gsap.fromTo(initialBg, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out' });
+  }
+
+  if (initialCard) {
+    gsap.fromTo(initialCard, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.2 });
+  }
+
+  // On tab click
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', function () {
+      const index = tab.dataset.index;
+
+      tabs.forEach((t) => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      contents.forEach((content) => {
+        content.classList.remove('active');
+      });
+
+      const activeContent = section.querySelector(`.ingredient-tab-content[data-index="${index}"]`);
+      if (activeContent) {
+        activeContent.classList.add('active');
+
+        const bgImage = activeContent.querySelector('.ingredient-bg-image');
+        const productCard = activeContent.querySelector('.gsap-product-card');
+
+        if (bgImage) {
+          gsap.fromTo(bgImage,
+            { y: 80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+          );
+        }
+
+        if (productCard) {
+          gsap.fromTo(productCard,
+            { y: 80, opacity: 0 },
+            { y: 0, opacity: 1, duration: 1, ease: 'power3.out', delay: 0.2 }
+          );
+        }
+      }
+    });
+  });
+  
+});
+</script>
+
+
+{% schema %}
+{
+  "name": "Ingredient Tabs",
+  "tag": "section",
+  "class": "ingredient-tabs-custom",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Section Heading",
+      "default": "Ingredients"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_title",
+          "label": "Tab Title",
+          "default": "Tab 1"
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Tab Icon"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Main Title",
+          "default": "Main Title of Ingredient"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Write a short description for this ingredient."
+        },
+        {
+          "type": "text", 
+          "id": "button_text", 
+          "label": "Button Text", 
+          "default": "View All"
+        },
+        {
+          "type": "url", 
+          "id": "button_url", 
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "title_Product",
+          "label": "Product Box Title",
+          "default": "Main Title of Product"
+        },
+        {
+          "type": "textarea",
+          "id": "description_discount",
+          "label": "Description Discount",
+          "default": "Extra 10% Off on first purchase"
+        },
+        {
+          "type": "url",
+          "id": "product_url",
+          "label": "Product URL"
+        },
+        {
+          "type": "image_picker",
+          "id": "image1",
+          "label": "Foreground Image (Product Box)"
+        },
+        {
+          "type": "image_picker",
+          "id": "blob_image",
+          "label": "Blob Background Image (Swirl Effect)"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 10,
+  "presets": [
+    {
+      "name": "Ingredient Tabs",
+      "category": "Custom"
+    }
+  ]
+}
+{% endschema %}
+
