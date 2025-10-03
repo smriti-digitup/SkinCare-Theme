@@ -3,7 +3,7 @@
 
 {%- comment -%}
 Set this to your actual placeholder extension: '.png' or '.webp' (case-sensitive).
-Make sure /assets contains: Frame-1…Frame-6 with this extension.
+Make sure /assets contains Frame-1…Frame-6 with this extension.
 {%- endcomment -%}
 {%- assign placeholder_ext = '.png' -%}
 
@@ -112,26 +112,27 @@ Make sure /assets contains: Frame-1…Frame-6 with this extension.
         <div class="gallery-container page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %} data-cascade {% endif %}
         >
-          {%- comment -%}
-          Render 10 items. If an image setting is blank, fall back to Frame-1..Frame-6 (cycled).
-          {%- endcomment -%}
+          {%- comment -%} 10 items. If image blank, fallback to Frame-1..Frame-6. {%- endcomment -%}
           {% for i in (1..10) %}
             {% assign img_id = 'image_' | append: i %}
             {% assign frame_index = i | minus: 1 | modulo: 6 | plus: 1 %}
             {% capture placeholder_name %}Frame-{{ frame_index }}{{ placeholder_ext }}{% endcapture %}
 
-            {%- comment -%} choose image_src without any comparisons in {{ }} or assign {%- endcomment -%}
             {% if section.settings[img_id] != blank %}
-              {% assign image_src = section.settings[img_id] | img_url: '318x318', crop: 'center' %}
+              <img
+                class="gallery-item gallery-item-{{ i }}"
+                src="{{ section.settings[img_id] | image_url: width: 318, height: 318, crop: 'center' }}"
+                width="318" height="318"
+                data-index="{{ i }}"
+                alt="category-image {{ i }}">
             {% else %}
-              {% assign image_src = placeholder_name | asset_url %}
+              <img
+                class="gallery-item gallery-item-{{ i }}"
+                src="{{ placeholder_name | asset_url }}"
+                width="318" height="318"
+                data-index="{{ i }}"
+                alt="placeholder category-image {{ i }}">
             {% endif %}
-
-            <img
-              class="gallery-item gallery-item-{{ i }}"
-              src="{{ image_src }}"
-              data-index="{{ i }}"
-              alt="category-image {{ i }}">
           {% endfor %}
         </div>
       </div>
@@ -151,7 +152,6 @@ Make sure /assets contains: Frame-1…Frame-6 with this extension.
     </div>
 
     <div class="main_content">
-      {%- comment -%} Titles & CTAs for the same 10 items. {%- endcomment -%}
       {% for i in (1..10) %}
         {% assign title_id = 'title_' | append: i %}
         {% assign button_text_id = 'button_text_' | append: i %}
@@ -164,13 +164,9 @@ Make sure /assets contains: Frame-1…Frame-6 with this extension.
           </h3>
 
           {% if section.settings[button_url_id] != blank %}
-            <a href="{{ section.settings[button_url_id] }}" class="button button--primary semibold">
-              {{ btn_text }}
-            </a>
+            <a href="{{ section.settings[button_url_id] }}" class="button button--primary semibold">{{ btn_text }}</a>
           {% else %}
-            <button type="button" class="button button--primary semibold" disabled>
-              {{ btn_text }}
-            </button>
+            <button type="button" class="button button--primary semibold" disabled>{{ btn_text }}</button>
           {% endif %}
         </div>
       {% endfor %}
