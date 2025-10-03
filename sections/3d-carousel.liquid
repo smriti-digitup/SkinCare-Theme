@@ -2,10 +2,9 @@
 {{ '3d-carousel.js' | asset_url | script_tag }}
 
 {%- comment -%}
-Set this to your actual placeholder extension: '.png' or '.webp' (case-sensitive).
-Make sure /assets contains Frame-1…Frame-6 with this extension.
+Your assets are: Frame-1.webp … Frame-6.webp (capital F, .webp)
 {%- endcomment -%}
-{%- assign placeholder_ext = '.png' -%}
+{%- assign placeholder_ext = '.webp' -%}
 
 {% schema %}
 {
@@ -112,7 +111,6 @@ Make sure /assets contains Frame-1…Frame-6 with this extension.
         <div class="gallery-container page-width section-{{ section.id }}-padding isolate{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %} data-cascade {% endif %}
         >
-          {%- comment -%} 10 items. If image blank, fallback to Frame-1..Frame-6. {%- endcomment -%}
           {% for i in (1..10) %}
             {% assign img_id = 'image_' | append: i %}
             {% assign frame_index = i | minus: 1 | modulo: 6 | plus: 1 %}
