@@ -1,8 +1,15 @@
 {% for product in collection.products %}
-  <div class="ajax-product"
-       data-tags="{{ product.tags | join: ',' }}"
-       data-url="{{ product.url }}"
-       data-title="{{ product.title }}"
-       data-image="{{ product.featured_image | image_url: width: 400 }}">
+  {% if product.featured_image %}
+    {% assign img_url = product.featured_image | image_url: width: 400 %}
+  {% else %}
+    {% assign img_url = 'Product Card 1.webp' | asset_url %}
+  {% endif %}
+
+  <div
+    class="ajax-product"
+    data-tags="{{ product.tags | join: ',' }}"
+    data-url="{{ product.url }}"
+    data-title="{{ product.title | escape }}"
+    data-image="{{ img_url }}">
   </div>
 {% endfor %}
