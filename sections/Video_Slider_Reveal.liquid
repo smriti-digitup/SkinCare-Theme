@@ -161,11 +161,6 @@
   <div class="slideshow">
     {% for block in section.blocks %}
       <div class="slide">
-        {%- comment -%}
-          Slide image with mobile/desktop logic:
-          - If either desktop or mobile image exists, render <picture> with best available sources.
-          - If neither exists, render a Shopify placeholder.
-        {%- endcomment -%}
         {% assign slide_img = block.settings.image %}
         {% assign slide_mobile_img = block.settings.mobile_image %}
 
@@ -181,7 +176,7 @@
           </picture>
         {% else %}
           <div class="media-placeholder">
-            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
           </div>
         {% endif %}
 
