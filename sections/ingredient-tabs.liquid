@@ -11,7 +11,7 @@
         {% if block.settings.icon %}
           <img src="{{ block.settings.icon | image_url }}" class="ingredient-icon" alt="{{ block.settings.tab_title }}">
         {% else %}
-          <img src="{{ 'product-sample.webp' | asset_url }}" class="ingredient-icon" alt="{{ block.settings.tab_title }}">
+          <img src="{{ 'product-sample.webp' | asset_url }}" class="ingredient-icon" alt="product-sample">
         {% endif %}
         <span class="b1 regular">{{ block.settings.tab_title }}</span>
       </div>
@@ -35,7 +35,7 @@
               <img class="ingredient-bg-image" src="{{ block.settings.blob_image | image_url: width: 800 }}" alt="Background Image">
               {% else %}
                 <img
-                  src="{{ 'product-sample.webp' | asset_url }}"
+                  src="{{ 'ingreditents.webp' | asset_url }}"
                   alt="Background Image"
                   class="ingredient-bg-image"
                 >
