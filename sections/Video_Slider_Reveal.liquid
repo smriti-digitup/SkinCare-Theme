@@ -72,6 +72,11 @@
     position: relative;
     padding-top: 2px;
   }
+
+  /* Placeholder helpers */
+  .media-placeholder { width: 100%; }
+  .media-placeholder .placeholder-svg { width: 100%; height: auto; display: block; }
+  .fill-height .placeholder-svg { height: 100%; }
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
@@ -101,7 +106,8 @@
       </div>
     {% else %}
       <div class="video-section__media desktop-video">
-        {% comment %} {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
+        <div class="media-placeholder fill-height">
+          {% comment %} {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
             <img
               src="{{ 'homepage-hero.webp' | asset_url }}"
               alt="Homepage hero"
@@ -110,6 +116,7 @@
               width="1920"
               height="1080"
             >
+        </div>
       </div>
     {% endif %}
 
