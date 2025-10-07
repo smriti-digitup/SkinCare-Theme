@@ -31,6 +31,12 @@
           <div class="ingredient-layered-wrapper">
             {% if block.settings.blob_image != blank %}
               <img class="ingredient-bg-image" src="{{ block.settings.blob_image | image_url: width: 800 }}" alt="Background Image">
+              {% else %}
+                <img
+                  src="{{ 'product-sample.webp' | asset_url }}"
+                  alt="Background Image"
+                  class="ingredient-bg-image"
+                >
             {% endif %}
             {% if block.settings.image1 != blank %}
               <div class="foreground-box gsap-product-card">
