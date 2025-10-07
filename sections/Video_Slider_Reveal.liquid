@@ -138,7 +138,14 @@
     {% else %}
       <div class="video-section__media mobile-video">
         <div class="media-placeholder fill-height">
-          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+          <img
+              src="{{ 'homepage-mobile.webp' | asset_url }}"
+              alt="Homepage hero"
+              class="media__image"
+              loading="eager"
+              width="1920"
+              height="1080"
+            >
         </div>
       </div>
     {% endif %}
