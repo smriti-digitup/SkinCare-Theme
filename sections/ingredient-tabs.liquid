@@ -47,9 +47,13 @@
                   <p class="b3 regular">{{ block.settings.description_discount }}</p>
                 </div>
                 <div>
-                  {% comment %} <a href="{{ block.settings.product_url }}" target="_blank">
-                    <img src="{{ block.settings.image1 | image_url: width: 200 }}" alt="Foreground Image">
-                  </a> {% endcomment %}
+                  <a href="{{ block.settings.product_url }}" target="_blank">
+                    {% if block.settings.image1 %}
+                      <img src="{{ block.settings.image1 | image_url: width: 200 }}" alt="Foreground Image">
+                    {% else %}
+                      <img src="{{ 'product-sample.webp' | asset_url }}" alt="Foreground Image">
+                    {% endif %}
+                  </a>
                 </div>
               </div>
             {% endif %}
