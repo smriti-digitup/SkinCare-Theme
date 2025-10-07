@@ -34,7 +34,7 @@
 }
 
 .right-swiper .swiper-slide img {
-  //height: 120px;
+  /* height: 120px; */
   border-radius: 12px;
   object-fit: cover;
 }
@@ -73,7 +73,6 @@
   gap: 0;
   padding: 5rem 0;
   z-index: 0;
-  
 }
 .swiper-slide {
   display: flex !important;
@@ -100,7 +99,7 @@
 .image-content .image-content-info {
   margin: 0;
 }
-  
+
 .image-content-btn {
   text-decoration: none;
 }
@@ -109,15 +108,12 @@
   .animated-below-elements .regular{
     text-align: left;
   }
-
   .swiper-slide.image.image-5{
     transform: translateY(50px) scale(0.8);
   }
-
   .swiper-slide.image.image-6{
     transform: translateY(-80px) scale(1.1);
   }
-
   .swiper-slide.image.image-7{
     transform: translateY(-150px) scale(0.8);
   }
@@ -131,16 +127,13 @@
     padding: 30px;
     gap: 0;
   }
-
   .floating-row-wrapper .animated-heading1{
     text-align: center;
   }
-
   .text-content {
     width: 100%;
     position: relative;
   }
-
   .dual-swiper-wrapper {
     flex-direction: column;
     align-items: center;
@@ -218,7 +211,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
 <div class="page-width floating-row-wrapper collection--full-width">
-  
   <!-- Text column -->
   <div class="text-content scroll-animate">
     <div class="heading-hover-wrapper">
@@ -235,25 +227,38 @@
 
   <!-- Dual Swiper wrapper -->
   <div class="dual-swiper-wrapper">
-    
+    {% comment %}
+      Cycle placeholders from assets: doc1.webp, doc2.webp, doc3.webp
+    {% endcomment %}
+    {% assign placeholders = "doc1.webp,doc2.webp,doc3.webp" | split: "," %}
+    {% assign blocks_count = section.blocks.size %}
+
     <!-- LEFT Swiper -->
     <div class="swiper mySwiper scroll-animate left-swiper">
       <div class="swiper-wrapper">
         {% assign total_needed = 12 %}
         {% assign current_index = 0 %}
-        
+
         {% for i in (1..total_needed) %}
-          {% assign block = section.blocks[current_index] %}
-          
-          {% if block.settings.image %}
-            <div class="swiper-slide image">
-              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
-            </div>
+          {% if blocks_count > 0 %}
+            {% assign block = section.blocks[current_index] %}
           {% endif %}
-          
-          {% assign current_index = current_index | plus: 1 %}
-          {% if current_index >= section.blocks.size %}
-            {% assign current_index = 0 %}
+
+          <div class="swiper-slide image">
+            {% if blocks_count > 0 and block.settings.image %}
+              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
+            {% else %}
+              {% assign ph_index = forloop.index0 | modulo: placeholders.size %}
+              {% assign ph = placeholders[ph_index] %}
+              <img src="{{ ph | asset_img_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
+            {% endif %}
+          </div>
+
+          {% if blocks_count > 0 %}
+            {% assign current_index = current_index | plus: 1 %}
+            {% if current_index >= blocks_count %}
+              {% assign current_index = 0 %}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>
@@ -264,30 +269,38 @@
       <div class="swiper-wrapper">
         {% assign total_needed = 12 %}
         {% assign current_index = 0 %}
-        
+
         {% for i in (1..total_needed) %}
-          {% assign block = section.blocks[current_index] %}
-          
-          {% if block.settings.image %}
-            <div class="swiper-slide image">
-              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
-              {% if block.type == 'main_image' %}
-                <div class="image-content">
-                  <p class="image-content-heading b2 semibold">{{ block.settings.heading }}</p>
-                  <p class="image-content-info b3">{{ block.settings.paragraph }}</p>
-                </div>
-              {% endif %}
-            </div>
+          {% if blocks_count > 0 %}
+            {% assign block = section.blocks[current_index] %}
           {% endif %}
-          
-          {% assign current_index = current_index | plus: 1 %}
-          {% if current_index >= section.blocks.size %}
-            {% assign current_index = 0 %}
+
+          <div class="swiper-slide image">
+            {% if blocks_count > 0 and block.settings.image %}
+              <img src="{{ block.settings.image | image_url: width: 300 }}" alt="Image {{ i }}" loading="lazy">
+            {% else %}
+              {% assign ph_index = forloop.index0 | modulo: placeholders.size %}
+              {% assign ph = placeholders[ph_index] %}
+              <img src="{{ ph | asset_img_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
+            {% endif %}
+
+            {% if blocks_count > 0 and block.type == 'main_image' %}
+              <div class="image-content">
+                <p class="image-content-heading b2 semibold">{{ block.settings.heading }}</p>
+                <p class="image-content-info b3">{{ block.settings.paragraph }}</p>
+              </div>
+            {% endif %}
+          </div>
+
+          {% if blocks_count > 0 %}
+            {% assign current_index = current_index | plus: 1 %}
+            {% if current_index >= blocks_count %}
+              {% assign current_index = 0 %}
+            {% endif %}
           {% endif %}
         {% endfor %}
       </div>
     </div>
-
   </div>
 </div>
 
