@@ -106,21 +106,11 @@
       </div>
     {% else %}
       <div class="video-section__media desktop-video">
-        <div class="media-placeholder fill-height">
-          {% comment %} {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
-            <img
-              src="{{ 'homepage-hero.webp' | asset_url }}"
-              alt="Homepage hero"
-              class="media__image"
-              loading="eager"
-              width="1920"
-              height="1080"
-            >
-        </div>
+        <img src="{{ 'homepage-hero.webp' | asset_url }}" alt="Hero image" loading="eager" fetchpriority="high">
       </div>
     {% endif %}
 
-    {%- comment -%} Mobile media (video or placeholder) {%- endcomment -%}
+    {%- comment -%} Mobile media (video or fallback image) {%- endcomment -%}
     {% if section.settings.video_mobile != blank %}
       <div class="video-section__media mobile-video">
         {{
