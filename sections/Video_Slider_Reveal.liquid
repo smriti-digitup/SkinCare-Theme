@@ -107,7 +107,15 @@
     {% else %}
       <div class="video-section__media desktop-video">
         <div class="media-placeholder fill-height">
-          {{ 'homepage-hero' | placeholder_svg_tag: 'placeholder-svg' }}
+          {% comment %} {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
+            <img
+              src="{{ 'homepage-hero.webp' | asset_url }}"
+              alt="Homepage hero"
+              class="media__image"
+              loading="eager"
+              width="1920"
+              height="1080"
+            >
         </div>
       </div>
     {% endif %}
