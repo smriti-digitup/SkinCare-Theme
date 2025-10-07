@@ -210,7 +210,11 @@
                   <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.title }}">
                 {% else %}
                   <div class="media-placeholder">
-                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                    <img 
+                        src="{{ 'Product Card 1.webp' | asset_url }}" 
+                        alt="Placeholder product image">
+                    </div>
+                    {% comment %} {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
                   </div>
                 {% endif %}
               </div>
