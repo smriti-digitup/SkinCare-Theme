@@ -250,7 +250,7 @@
             {% else %}
               {% assign ph_index = forloop.index0 | modulo: placeholders.size %}
               {% assign ph = placeholders[ph_index] %}
-              <img src="{{ ph | asset_img_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
+              <img src="{{ ph | asset_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
             {% endif %}
           </div>
 
@@ -281,7 +281,7 @@
             {% else %}
               {% assign ph_index = forloop.index0 | modulo: placeholders.size %}
               {% assign ph = placeholders[ph_index] %}
-              <img src="{{ ph | asset_img_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
+              <img src="{{ ph | asset_url: '300x' }}" alt="Placeholder {{ i }}" loading="lazy">
             {% endif %}
 
             {% if blocks_count > 0 and block.type == 'main_image' %}
