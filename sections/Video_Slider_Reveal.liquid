@@ -72,6 +72,11 @@
     position: relative;
     padding-top: 2px;
   }
+
+  /* Placeholder helpers */
+  .media-placeholder { width: 100%; }
+  .media-placeholder .placeholder-svg { width: 100%; height: auto; display: block; }
+  .fill-height .placeholder-svg { height: 100%; }
 {%- endstyle -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
@@ -84,7 +89,7 @@
       {%- endunless -%}
     </div>
 
-    {%- comment -%} Desktop media (video or fallback image) {%- endcomment -%}
+    {%- comment -%} Desktop media (video or placeholder) {%- endcomment -%}
     {% if section.settings.video != blank %}
       <div class="video-section__media desktop-video">
         {{
@@ -101,11 +106,13 @@
       </div>
     {% else %}
       <div class="video-section__media desktop-video">
-        <img src="{{ 'homepage-hero.webp' | asset_url }}" alt="Hero image" loading="eager" fetchpriority="high">
+        <div class="media-placeholder fill-height">
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
       </div>
     {% endif %}
 
-    {%- comment -%} Mobile media (video or fallback image) {%- endcomment -%}
+    {%- comment -%} Mobile media (video or placeholder) {%- endcomment -%}
     {% if section.settings.video_mobile != blank %}
       <div class="video-section__media mobile-video">
         {{
@@ -122,7 +129,9 @@
       </div>
     {% else %}
       <div class="video-section__media mobile-video">
-        <img src="{{ 'homepage-hero.webp' | asset_url }}" alt="Hero image mobile" loading="eager" fetchpriority="high">
+        <div class="media-placeholder fill-height">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg' }}
+        </div>
       </div>
     {% endif %}
 
@@ -139,16 +148,29 @@
   <div class="slideshow">
     {% for block in section.blocks %}
       <div class="slide">
-        <!-- Always render picture; use fallbacks when images are missing -->
-        <picture>
-          <source
-            media="(max-width: 749px)"
-            srcset="{% if block.settings.mobile_image != blank %}{{ block.settings.mobile_image | image_url: width: 400 }}{% else %}{{ 'homepage-hero.webp' | asset_url }}{% endif %}">
-          <img
-            src="{% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1200 }}{% else %}{{ 'homepage-hero.webp' | asset_url }}{% endif %}"
-            alt="{{ block.settings.title | escape | default: 'Slide image' }}"
-            loading="lazy">
-        </picture>
+        {%- comment -%}
+          Slide image with mobile/desktop logic:
+          - If either desktop or mobile image exists, render <picture> with best available sources.
+          - If neither exists, render a Shopify placeholder.
+        {%- endcomment -%}
+        {% assign slide_img = block.settings.image %}
+        {% assign slide_mobile_img = block.settings.mobile_image %}
+
+        {% if slide_img != blank or slide_mobile_img != blank %}
+          <picture>
+            <source
+              media="(max-width: 749px)"
+              srcset="{% if slide_mobile_img != blank %}{{ slide_mobile_img | image_url: width: 400 }}{% else %}{{ slide_img | image_url: width: 400 }}{% endif %}">
+            <img
+              src="{% if slide_img != blank %}{{ slide_img | image_url: width: 1200 }}{% else %}{{ slide_mobile_img | image_url: width: 1200 }}{% endif %}"
+              alt="{{ block.settings.title | escape | default: 'Slide image' }}"
+              loading="lazy">
+          </picture>
+        {% else %}
+          <div class="media-placeholder">
+            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+          </div>
+        {% endif %}
 
         <div class="slide-content">
           {% if block.settings.title != blank %}
@@ -183,7 +205,14 @@
                     </a>
                   </div>
                 </div>
-                <img src="{{ product.featured_image | img_url: '300x' }}" alt="{{ product.title }}">
+
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | image_url: width: 300 }}" alt="{{ product.title }}">
+                {% else %}
+                  <div class="media-placeholder">
+                    {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                  </div>
+                {% endif %}
               </div>
             </div>
           {% else %}
@@ -209,8 +238,9 @@
     const revealSection = document.querySelector('.reveal-behind');
     const overlay = document.querySelector('.curve-svg');
 
-    document.querySelectorAll('video[data-fetchpriority]').forEach((video) => {
-      video.setAttribute('fetchpriority', video.dataset.fetchpriority);
+    /* Fix: the videos get a "fetchpriority" attribute (not data-*) via Liquid replace */
+    document.querySelectorAll('video[fetchpriority]').forEach((video) => {
+      // nothing needed; kept for symmetry if you want to read/adjust priority later
     });
 
     // Create dots
