@@ -176,7 +176,13 @@
           </picture>
         {% else %}
           <div class="media-placeholder">
-            {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+            <img
+              src="{{ 'homepage-mobile.webp' | asset_url }}"
+              alt="Homepage hero"
+              class="media__image"
+              loading="eager"
+            >
+            {% comment %} {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }} {% endcomment %}
           </div>
         {% endif %}
 
