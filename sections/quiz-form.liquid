@@ -10,8 +10,8 @@
 <section class="quiz-wrapper">
   <!-- Intro Slide -->
   <div id="quiz-intro" class="quiz-intro-slide" 
-       style="background-image: url({{ 'quiz-bg.webp' | asset_url }});"
-       data-mobile-bg="{{ 'quiz-bg.webp' | asset_url }}">
+       style="background-image: url({% if section.settings.bg_image != blank %}{{ section.settings.bg_image | image_url: width: 1600 }}{% else %}{{ 'quiz-bg.webp' | asset_url }}{% endif %});"
+       data-mobile-bg="{% if section.settings.bg_image_mobile != blank %}{{ section.settings.bg_image_mobile | image_url: width: 800 }}{% else %}{{ 'quiz-bg.webp' | asset_url }}{% endif %}">
     <div class="page-width intro-image">
       <div class="overlay"></div>
       <div class="intro-content">
@@ -24,7 +24,7 @@
 
 
   <!-- Quiz Container -->
-  <div id="quiz-container" class="quiz-container hidden" style="background-image: url({{ section.settings.ques_bg_image | image_url: width: 1600 }});">
+  <div id="quiz-container" class="quiz-container hidden" style="background-image: url({% if section.settings.ques_bg_image != blank %}{{ section.settings.ques_bg_image | image_url: width: 1600 }}{% else %}{{ 'quiz-bg2.webp' | asset_url }}{% endif %});">
     <form id="quiz-form">
       <div class="quiz-head">
         <div class="quiz-head-text">
@@ -260,7 +260,7 @@
   </div>
   
   <!-- Result Section -->
-  <div id="quiz-result" class="quiz-result hidden" style="background-image: url({{ section.settings.ques_bg_image | image_url: width: 1600 }});"></div>
+  <div id="quiz-result" class="quiz-result hidden" style="background-image: url({% if section.settings.ques_bg_image != blank %}{{ section.settings.ques_bg_image | image_url: width: 1600 }}{% else %}{{ 'quiz-bg2.webp' | asset_url }}{% endif %});"></div>
 </section>
 
 
