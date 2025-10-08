@@ -107,7 +107,8 @@
                     {%- if section.settings.show_image == true -%}
                       <div class="article-card__image-wrapper card__media">
                         <div class="article-card__image media">
-                          {{ placeholder_image | placeholder_svg_tag: 'blog-placeholder-svg' }}
+                          <img src="{{ 'blog-thumb.webp' | asset_url }}" alt="blog-thumbnail">
+                          {% comment %} {{ placeholder_image | placeholder_svg_tag: 'blog-placeholder-svg' }} {% endcomment %}
                         </div>
                       </div>
                     {%- endif -%}
