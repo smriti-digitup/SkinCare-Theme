@@ -17,7 +17,7 @@
           {% if block.settings.brand_logo != blank %}
             <img src="{{ block.settings.brand_logo | image_url: width: 200 }}" alt="{{ block.settings.brand_name | escape }}">
           {% else %}
-            <img src="{{ nykaa-logo.webp | image_url }}" alt="brand-logo">
+            <img src="{{ 'nykaa-logo.webp' | image_url }}" alt="brand-logo">
           {% endif %}
         </div>
       {% endfor %}
