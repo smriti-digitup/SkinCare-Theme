@@ -11,12 +11,12 @@
       {% endif %}
 
       {% if section.settings.testtitle != blank %}
-        <div class="section-header center {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        <div class="section-header center">
           <h2 class="home-title title review-heading regular">{{ section.settings.testtitle | escape }}</h2>
         </div>
       {% endif %}
 
-      <div class="testimonial-inner {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+      <div class="testimonial-inner">
         {% if section.blocks.size > 0 %}
           <div
             class="smtestimonials-carousel-{{ section.id }} smtestimonials-carousel slider-with-options owl-carousel owl-theme"
@@ -32,19 +32,21 @@
               {% assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 %}
               {% assign placeholder_name = 'demo' | append: placeholder_index | append: '.webp' %}
 
+              {% if block.settings.testimonialimages != blank %}
+                {% assign bg_url = block.settings.testimonialimages | image_url: width: 1600 %}
+              {% else %}
+                {% assign bg_url = placeholder_name | asset_url %}
+              {% endif %}
+
               <div
-                class="smtestimonials-container testimonialimages review-wrapper"
+                class="smtestimonials-container review-wrapper"
                 {{ block.shopify_attributes }}
-                style="{% if block.settings.testimonialimages %}
-                         background-image: url({{ block.settings.testimonialimages | image_url }});
-                       {% else %}
-                         background-image: url({{ placeholder_name | asset_url }});
-                       {% endif %}"
+                style="background-image: url('{{ bg_url }}');"
               >
                 <div class="user-content">
                   {% if block.settings.user_image != blank %}
                     <div class="user-image-wrapper">
-                      <img src="{{ block.settings.user_image | image_url }}" alt="User Image" class="user-image">
+                      <img src="{{ block.settings.user_image | image_url: width: 160 }}" alt="User Image" class="user-image">
                     </div>
                   {% endif %}
 
@@ -83,21 +85,25 @@
 </div>
 
 <script>
-  // Init Owl on both shared class and per-section class
-  $('.smtestimonials-carousel, .smtestimonials-carousel-{{ section.id }}').owlCarousel({
-    loop: true,
-    margin: 15,
-    nav: false,
-    dots: true,
-    autoplay: false,
-    autoplayTimeout: 5000,
-    responsive: {
-      0:   { items: 2 },
-      480: { items: 2 },
-      768: { items: 4 },
-      1024:{ items: 4 }
+  (function() {
+    // Make sure owlCarousel is there; if not, this won't block the page
+    if (typeof jQuery !== 'undefined' && typeof jQuery.fn.owlCarousel === 'function') {
+      jQuery('.smtestimonials-carousel, .smtestimonials-carousel-{{ section.id }}').owlCarousel({
+        loop: true,
+        margin: 15,
+        nav: false,
+        dots: true,
+        autoplay: false,
+        autoplayTimeout: 5000,
+        responsive: {
+          0:   { items: 2 },
+          480: { items: 2 },
+          768: { items: 4 },
+          1024:{ items: 4 }
+        }
+      });
     }
-  });
+  })();
 </script>
 
 {% schema %}
@@ -106,87 +112,25 @@
   "tag": "section",
   "class": "bannerwithtestimonial",
   "settings": [
-    {
-      "type": "header",
-      "content": "Testimonial Settings"
-    },
-    {
-      "type": "text",
-      "id": "testtitle",
-      "label": "Heading",
-      "default": "Our Testimonials"
-    },
-    {
-      "type": "text",
-      "id": "testtitle1",
-      "label": "Sub Title",
-      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-    },
-    {
-      "type": "color",
-      "id": "testimonial_background",
-      "label": "Background Color",
-      "default": "#fafafa"
-    },
-    {
-      "type": "color",
-      "id": "testimonial_textcolor1",
-      "label": "Text Color1",
-      "default": "#666666"
-    },
-    {
-      "type": "color",
-      "id": "testimonial_textcolor2",
-      "label": "Text Color2",
-      "default": "#232323"
-    },
-    {
-      "type": "checkbox",
-      "id": "swipe_on_mobile",
-      "default": false,
-      "label": "Enable Swipe on Mobile"
-    }
+    { "type": "header", "content": "Testimonial Settings" },
+    { "type": "text", "id": "testtitle", "label": "Heading", "default": "Our Testimonials" },
+    { "type": "text", "id": "testtitle1", "label": "Sub Title", "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit." },
+    { "type": "color", "id": "testimonial_background", "label": "Background Color", "default": "#fafafa" },
+    { "type": "color", "id": "testimonial_textcolor1", "label": "Text Color1", "default": "#666666" },
+    { "type": "color", "id": "testimonial_textcolor2", "label": "Text Color2", "default": "#232323" },
+    { "type": "checkbox", "id": "swipe_on_mobile", "default": false, "label": "Enable Swipe on Mobile" }
   ],
   "blocks": [
     {
       "type": "testimonials_block",
       "name": "Testimonials Block",
       "settings": [
-        {
-          "type": "image_picker",
-          "id": "testimonialimages",
-          "label": "Background Image"
-        },
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image",
-          "info": "Size: 250px X 250px"
-        },
-        {
-          "type": "image_picker",
-          "id": "user_image",
-          "label": "Customer Image",
-          "info": "Size: 50px X 50px"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Name",
-          "default": "Stephan Robot"
-        },
-        {
-          "type": "text",
-          "id": "location",
-          "label": "Location",
-          "default": "Location"
-        },
-        {
-          "type": "text",
-          "id": "disc",
-          "label": "discription",
-          "default": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
-        }
+        { "type": "image_picker", "id": "testimonialimages", "label": "Background Image" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Size: 250px X 250px" },
+        { "type": "image_picker", "id": "user_image", "label": "Customer Image", "info": "Size: 50px X 50px" },
+        { "type": "text", "id": "title", "label": "Name", "default": "Stephan Robot" },
+        { "type": "text", "id": "location", "label": "Location", "default": "Location" },
+        { "type": "text", "id": "disc", "label": "discription", "default": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal" }
       ]
     }
   ],
