@@ -90,7 +90,7 @@
 
 <footer class="footer floating-row-wrapper1 parallax-footer color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
   {% comment %} style="background-image: url('{{ section.settings.footer_bg_image | image_url: width: 1600 }}');  {% endcomment %}
-  style="background-image: url('{% if section.settings.footer_bg_image != blank %}{{ section.settings.footer_bg_image | image_url: width: 1600 }}{% else %}{{ 'footer-bg.webp' | asset_url }}{% endif %}')";
+  style="background-image: url('{% if section.settings.footer_bg_image != blank %}{{ section.settings.footer_bg_image | image_url: width: 1600 }}{% else %}{{ 'footer-bg.webp' | asset_url }}{% endif %}');
   background-size: cover; background-repeat: no-repeat; background-position: center;"
   {{ block.shopify_attributes }}
   {% if settings.animations_reveal_on_scroll %}
