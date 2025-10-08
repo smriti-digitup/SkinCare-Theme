@@ -45,14 +45,15 @@
           >
             {% for block in section.blocks %}
             {% assign placeholder_index = forloop.index0 | modulo: 4 | plus: 1 %}
-            {% assign placeholder_name = 'demo' | append: placeholder_index | append: '.webp' %}
-            <div
-              class="smtestimonials-container {% if block.settings.testimonialimages %}testimonialimages lazyload{% else %}testimonialimages lazyload{% endif %} review-wrapper"
-              style="{% if block.settings.testimonialimages %}
-                      background-image: url({{ block.settings.testimonialimages | image_url }});
-                    {% else %}
-                      background-image: url({{ placeholder_name | asset_url }});
-                    {% endif %}">
+          {% assign placeholder_name = 'demo' | append: placeholder_index | append: '.webp' %}
+
+          <div
+            class="smtestimonials-container {% if block.settings.testimonialimages %}testimonialimages lazyload{% else %}testimonialimages lazyload{% endif %} review-wrapper"
+            style="{% if block.settings.testimonialimages %}
+                    background-image: url({{ block.settings.testimonialimages | image_url }});
+                  {% else %}
+                    background-image: url({{ placeholder_name | asset_url }});
+                  {% endif %}">
                 <div class="user-content">
                   {% if block.settings.user_image != blank %}
                     <div class="user-image-wrapper">
