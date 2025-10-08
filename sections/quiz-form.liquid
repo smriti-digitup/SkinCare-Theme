@@ -513,7 +513,7 @@ text-align: left;
 
 @media (max-width: 767px) {
   .quiz-intro-slide {
-    background-image: url('{% if section.settings.bg_image_mobile != blank %}{{ section.settings.bg_image_mobile | image_url: width: 800 }}{% else %}{{ 'quiz-bg2.webp' | asset_url }}{% endif %}') !important;
+    background-image: url('{% if section.settings.bg_image_mobile != blank %}{{ section.settings.bg_image_mobile | image_url: width: 800 }}{% else %}{{ 'quiz-mobile.webp' | asset_url }}{% endif %}') !important;
     min-height: 90rem!important;
   }
 }
