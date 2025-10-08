@@ -49,8 +49,7 @@
                 {% if section.settings.testimonialimages %}
                   data-bg="{{ block.settings.testimonialimages | img_url: 'master' }}"
                 {% endif %}
-                {% comment %} style=" background-image: url({{ block.settings.testimonialimages | image_url }});" {% endcomment %}
-                style="background-image: url({% if block.settings.testimonialimages != blank %}{{ block.settings.testimonialimages | image_url }}{% else %}{{ 'Product Card 1.webp' | asset_url }}{% endif %});"
+                style=" background-image: url({{ block.settings.testimonialimages | image_url }});"
               >
                 <div class="user-content">
                   {% if block.settings.user_image != blank %}
