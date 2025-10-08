@@ -1,1 +1,71 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","blocks":{"footer-0":{"type":"link_list","settings":{"heading":"Shop","menu":"footer"}},"link_list_LqCCHr":{"type":"link_list","settings":{"heading":"Quick Links","menu":"footer-menu2"}},"link_list_QDDmVm":{"type":"link_list","settings":{"heading":"Customer Services","menu":"footer-menu-3"}},"footer-2":{"type":"text","settings":{"heading":"Office","subtext":"<p>101-104, 1st Floor, Vipul Plaza, Suncity, Golf Course Road, Sector- 54, Gurugram (HR) - 122011, India<\/p>"}}},"block_order":["footer-0","link_list_LqCCHr","link_list_QDDmVm","footer-2"],"settings":{"company_logo":"shopify:\/\/shop_images\/FCL_Website_Logo_3_1.svg","footer_bg_image":"shopify:\/\/shop_images\/2c4fe96b7cac2b0e991de365fc86b10d92ef44f8.png","color_scheme":"scheme-1","newsletter_enable":true,"newsletter_heading":"Subscribe to our emails","newsletter_subheading":"Stay in the Loop Get the Latest Updates & Insights!","enable_follow_on_shop":true,"show_social":true,"enable_country_selector":false,"enable_language_selector":false,"payment_enable":true,"show_policy":false,"margin_top":48,"padding_top":36}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "footer-0": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
+        "link_list_LqCCHr": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Quick Links",
+            "menu": ""
+          }
+        },
+        "link_list_QDDmVm": {
+          "type": "link_list",
+          "settings": {
+            "heading": "Customer Services",
+            "menu": ""
+          }
+        },
+        "footer-2": {
+          "type": "text",
+          "settings": {
+            "heading": "Office",
+            "subtext": "<p>101-104, 1st Floor, Vipul Plaza, Suncity, Golf Course Road, Sector- 54, Gurugram (HR) - 122011, India</p>"
+          }
+        }
+      },
+      "block_order": [
+        "footer-0",
+        "link_list_LqCCHr",
+        "link_list_QDDmVm",
+        "footer-2"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "newsletter_subheading": "Stay in the Loop Get the Latest Updates & Insights!",
+        "enable_follow_on_shop": true,
+        "show_social": true,
+        "enable_country_selector": false,
+        "enable_language_selector": false,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 48,
+        "padding_top": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
