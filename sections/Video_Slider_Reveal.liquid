@@ -233,7 +233,14 @@
             <p style="color:red;">⚠ Product not found via all_products.</p>
           {% endif %}
         {% else %}
-          <p style="color:red;">⚠ No product selected in Theme Editor.</p>
+          <div class="promo__product">
+            <div class="promo-banner__product"><p class="b2 semibold ellipsis">{{ "product-title" }}</p>
+            <span class="b3 regular">{{ "product_offer_text" }}</span>
+            <img src="{{ 'Product Card 1.webp' | asset_url }}" alt="{{ "product-title" }}">
+            </div>
+            <a href="#" class="button button--primary">Buy Now</a>
+          </div>
+          {% comment %} <p style="color:red;">⚠ No product selected in Theme Editor.</p> {% endcomment %}
         {% endif %}
       </div>
     {% endfor %}
