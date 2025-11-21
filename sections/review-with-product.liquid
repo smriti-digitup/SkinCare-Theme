@@ -1,5 +1,9 @@
 {{ 'review-with-product.css' | asset_url | stylesheet_tag }}
-<div class="review-section page-width">
+<div
+  class="review-section page-width"
+  style="background-color: {{ section.settings.testimonial_background }};"
+  aria-label="Testimonials section"
+>
   <div class="row">
     <div class="smtestimonial col-xl-12 col-sm-12">
       {% if section.settings.testtitle1 != blank %}
@@ -11,7 +15,6 @@
       {% if section.settings.testtitle != blank %}
         <div
           class="section-header center {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          {{ block.shopify_attributes }}
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
             style="--animation-order: {{ forloop.index }};"
@@ -20,20 +23,16 @@
           <h2 class="home-title title review-heading regular">{{ section.settings.testtitle | escape }}</h2>
         </div>
       {% endif %}
-     
+
       <div
         class="testimonial-inner {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
         {% if settings.animations_reveal_on_scroll %}
           data-cascade
           style="--animation-order: {{ forloop.index }};"
         {% endif %}
-        {% if section.settings.testimonialimages %}
-          data-bg="{{ section.settings.testimonialimages | img_url: 'master' }}"
-        {% endif %}
       >
         {% if section.blocks.size > 0 %}
           <div
-            class="smtestimonials-carousel-{{ section.id }} smtestimonials-carousel slider-with-options owl-carousel owl-theme"
             class="smtestimonials-carousel-{{ section.id }} smtestimonials-carousel slider-with-options owl-carousel owl-theme"
             data-small="2"
             data-mobile="2"
@@ -44,35 +43,52 @@
             data-margin="15"
           >
             {% for block in section.blocks %}
-  <div
-    class="smtestimonials-container {% if block.settings.testimonialimages %}testimonialimages lazyload{% else %}testimonial-color{% endif %} review-wrapper"
-    {{ block.shopify_attributes }}
-    style="background-image: url({{ block.settings.testimonialimages | image_url }});"
-  >
-    <div class="user-content">
-      {% if block.settings.user_image %}
-        <div class="user-image-wrapper">
-          <img src="{{ block.settings.user_image | image_url }}" alt="{{ block.settings.title }}" class="user-image">
-        </div>
-      {% endif %}
+              <div
+                class="smtestimonials-container {% if block.settings.testimonialimages != blank %}testimonialimages lazyload{% else %}testimonial-color{% endif %} review-wrapper"
+                {{ block.shopify_attributes }}
+                {% if block.settings.testimonialimages != blank %}
+                  style="background-image: url({{ block.settings.testimonialimages | image_url }}); background-size: cover; background-position: center;"
+                {% endif %}
+              >
+                <div class="user-content">
+                  {% if block.settings.user_image != blank %}
+                    <div class="user-image-wrapper">
+                      <img src="{{ block.settings.user_image | image_url }}" alt="{{ block.settings.title | escape }}" class="user-image">
+                    </div>
+                  {% endif %}
 
-      <div class="user-container">
-        <div class="desc">
-          <p class="user-name b2 semibold">{{ block.settings.title }}</p>
-          <p class="user-location b4 regular">{{ block.settings.location }}</p>
-          <p class="user-location b4 regular">{{ block.settings.disc }}</p>
-        </div>
-      </div>
+                  <div class="user-container">
+                    <div class="desc">
+                      <div class="review-title">
+                        {% if block.settings.title != blank %}
+                          <p class="user-name b2 semibold">
+                            {{ block.settings.title | escape }}
+                          </p>
+                        {% endif %}
+                        {% if block.settings.location != blank %}
+                          <p class="user-location b4 regular">
+                            {{ block.settings.location | escape }}
+                          </p>
+                        {% endif %}
+                        {% if block.settings.disc != blank %}
+                          <p class="user-location b4 regular">
+                            {{ block.settings.disc | escape }}
+                          </p>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
 
-      <span class="str-style">
-        <i class="fa fa-star"></i><i class="fa fa-star"></i>
-        <i class="fa fa-star"></i><i class="fa fa-star"></i>
-        <i class="fa fa-star"></i>
-      </span>
-    </div>
-  </div>
-{% endfor %}
-
+                  <span class="str-style" aria-hidden="true">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                  </span>
+                </div>
+              </div>
+            {% endfor %}
           </div>
         {% endif %}
       </div>
@@ -81,40 +97,94 @@
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.smtestimonials-container').forEach(el => {
-      const bg = el.getAttribute('data-bg');
-      if (bg) {
-        el.style.setProperty('--bg-url', `url(${bg})`);
-        el.style.backgroundImage = 'none'; // prevent inline override
+  (function() {
+    // Use a scoped ready handler so multiple sections don't conflict
+    function initTestimonials(sectionId) {
+      var carouselSelector = '.smtestimonials-carousel-' + sectionId;
+
+      // Preload block backgrounds if any (set --bg-url CSS variable if needed)
+      document.querySelectorAll('.smtestimonials-container').forEach(function(el) {
+        // Only act on items inside this section (to avoid cross-section effects)
+        if (!el.closest(carouselSelector)) return;
+        var bg = el.getAttribute('data-bg');
+        // We don't rely on data-bg in this version (we used inline style when available),
+        // but leave this here to support lazy implementations.
+        if (bg) {
+          el.style.setProperty('--bg-url', 'url(' + bg + ')');
+          // prevent old inline background from overriding CSS variable
+          el.style.backgroundImage = 'none';
+        }
+      });
+
+      // Initialize owlCarousel for this section only
+      if (typeof jQuery === 'undefined' || typeof jQuery.fn.owlCarousel === 'undefined') {
+        // If jQuery or Owl not present, skip init gracefully
+        return;
       }
-    });
-  });
-  
-  $('.smtestimonials-carousel').owlCarousel({
-    loop: true,
-    margin: 15,
-    nav: false,
-    dots: true,
-    autoplay: false, // ❗Disable auto scroll
-    autoplayTimeout: 5000, // optional, default is 5000ms
-    responsive: {
-      0: {
-        items: 2,
-      },
-      480: {
-        items: 2,
-      },
-      768: {
-        items: 4,
-      },
-      1024: {
-        items: 4,
-      },
-    },
-  });
-  
+
+      var $carousel = jQuery(carouselSelector);
+      if (!$carousel.length) return;
+
+      // Destroy previously initialized carousel on hot reloads in editor (safe-guard)
+      if ($carousel.data('owl.carousel')) {
+        try { $carousel.trigger('destroy.owl.carousel'); } catch (e) { /* ignore */ }
+        $carousel.html($carousel.find('.owl-stage-outer').html() || $carousel.html());
+      }
+
+      $carousel.owlCarousel({
+        loop: true,
+        margin: parseInt($carousel.data('margin')) || 15,
+        nav: false,
+        dots: ($carousel.data('dots') === true || $carousel.data('dots') === 'true'),
+        autoplay: false, // auto scroll disabled by default
+        autoplayTimeout: 5000,
+        responsive: {
+          0: {
+            items: parseInt($carousel.data('small')) || 2
+          },
+          480: {
+            items: parseInt($carousel.data('mobile')) || 2
+          },
+          768: {
+            items: parseInt($carousel.data('tablet')) || 3
+          },
+          1024: {
+            items: parseInt($carousel.data('laptop')) || 4
+          }
+        }
+      });
+
+      // Optional: enable swipe on mobile if setting is enabled via data attribute
+      // (the schema has swipe_on_mobile: true/false)
+      // Owl Carousel supports touch by default; no extra config needed here.
+    }
+
+    // Initialize when DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        // initialize all testimonial carousels on page
+        document.querySelectorAll('[class*="smtestimonials-carousel-"]').forEach(function(el) {
+          // extract the unique section id from the className
+          var classList = Array.prototype.slice.call(el.classList);
+          var sectionClass = classList.find(function(c) { return c.indexOf('smtestimonials-carousel-') === 0; });
+          if (!sectionClass) return;
+          var sectionId = sectionClass.replace('smtestimonials-carousel-', '');
+          initTestimonials(sectionId);
+        });
+      });
+    } else {
+      // already ready
+      document.querySelectorAll('[class*="smtestimonials-carousel-"]').forEach(function(el) {
+        var classList = Array.prototype.slice.call(el.classList);
+        var sectionClass = classList.find(function(c) { return c.indexOf('smtestimonials-carousel-') === 0; });
+        if (!sectionClass) return;
+        var sectionId = sectionClass.replace('smtestimonials-carousel-', '');
+        initTestimonials(sectionId);
+      });
+    }
+  })();
 </script>
+
 {% schema %}
 {
   "name": "Review with product",
@@ -155,12 +225,17 @@
       "label": "Text Color2",
       "default": "#232323"
     },
-
     {
       "type": "checkbox",
       "id": "swipe_on_mobile",
       "default": false,
       "label": "Enable Swipe on Mobile"
+    },
+    {
+      "type": "checkbox",
+      "id": "animations_reveal_on_scroll",
+      "default": false,
+      "label": "Reveal animation on scroll"
     }
   ],
   "blocks": [
@@ -171,7 +246,8 @@
         {
           "type": "image_picker",
           "id": "testimonialimages",
-          "label": "Background Image"
+          "label": "Background Image (block)",
+          "info": "Optional - overrides section background for this card"
         },
         {
           "type": "image_picker",
@@ -200,9 +276,9 @@
         {
           "type": "text",
           "id": "disc",
-          "label": "discription",
+          "label": "Description",
           "default": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
-        },
+        }
       ]
     }
   ],
@@ -210,18 +286,10 @@
     {
       "name": "Review with product",
       "blocks": [
-        {
-          "type": "testimonials_block"
-        },
-        {
-          "type": "testimonials_block"
-        },
-        {
-          "type": "testimonials_block"
-        },
-        {
-          "type": "testimonials_block"
-        }
+        { "type": "testimonials_block" },
+        { "type": "testimonials_block" },
+        { "type": "testimonials_block" },
+        { "type": "testimonials_block" }
       ]
     }
   ]
