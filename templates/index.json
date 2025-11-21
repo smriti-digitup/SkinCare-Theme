@@ -581,6 +581,58 @@
       "settings": {
         "heading": "Our Brand Partners"
       }
+    },
+    "review_with_product_iVj6WT": {
+      "type": "review-with-product",
+      "blocks": {
+        "testimonials_block_k83MW7": {
+          "type": "testimonials_block",
+          "settings": {
+            "title": "Stephan Robot",
+            "location": "Location",
+            "disc": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
+          }
+        },
+        "testimonials_block_yVE4AR": {
+          "type": "testimonials_block",
+          "settings": {
+            "title": "Stephan Robot",
+            "location": "Location",
+            "disc": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
+          }
+        },
+        "testimonials_block_ywMdex": {
+          "type": "testimonials_block",
+          "settings": {
+            "title": "Stephan Robot",
+            "location": "Location",
+            "disc": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
+          }
+        },
+        "testimonials_block_VQCpxE": {
+          "type": "testimonials_block",
+          "settings": {
+            "title": "Stephan Robot",
+            "location": "Location",
+            "disc": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
+          }
+        }
+      },
+      "block_order": [
+        "testimonials_block_k83MW7",
+        "testimonials_block_yVE4AR",
+        "testimonials_block_ywMdex",
+        "testimonials_block_VQCpxE"
+      ],
+      "name": "Review with product",
+      "settings": {
+        "testtitle": "Our Testimonials",
+        "testtitle1": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "testimonial_background": "#fafafa",
+        "testimonial_textcolor1": "#666666",
+        "testimonial_textcolor2": "#232323",
+        "swipe_on_mobile": false
+      }
     }
   },
   "order": [
@@ -595,6 +647,7 @@
     "ingredient_tabs_gJgbYe",
     "review_with_product_HWBERw",
     "featured_blog_yWJFFX",
-    "brand_slider_GT8m3m"
+    "brand_slider_GT8m3m",
+    "review_with_product_iVj6WT"
   ]
 }
