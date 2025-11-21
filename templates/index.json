@@ -588,6 +588,8 @@
         "testimonials_block_k83MW7": {
           "type": "testimonials_block",
           "settings": {
+            "image": "shopify://shop_images/c1be3149b0f72145727bf95fb02d49ca.jpg",
+            "user_image": "shopify://shop_images/c57361cb010c9772b1869fccea480bdc0b1f0c93.png",
             "title": "Stephan Robot",
             "location": "Location",
             "disc": "Terimakasih banyak, kini ruanganku menjadi lebih mewah dan terlihat mahal"
